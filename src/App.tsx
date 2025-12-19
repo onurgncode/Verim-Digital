@@ -144,8 +144,8 @@ function App() {
                 <DottedSurface className="fixed inset-0 opacity-40 pointer-events-none" />
 
                 {/* Navigation */}
-                <nav className="fixed top-0 left-0 w-full z-[60] glass px-6 py-4 flex justify-between items-center bg-black/50 backdrop-blur-md border-b border-white/10">
-                    <div className="text-xl sm:text-2xl font-bold tracking-tighter relative z-50">
+                <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] md:w-max z-[60] bg-white/[0.03] backdrop-blur-2xl px-6 md:px-10 py-3 md:py-4 flex justify-between items-center rounded-full border border-white/10 shadow-2xl">
+                    <div className="text-xl sm:text-2xl font-bold tracking-tighter relative z-50 mr-8 md:mr-12">
                         <a href="/" onClick={(e) => { e.preventDefault(); window.location.hash = ""; }}>VERIM <span className="text-white">DIGITAL</span></a>
                     </div>
 
@@ -193,6 +193,14 @@ function App() {
                                 transition={{ duration: 0.2 }}
                                 className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center"
                             >
+                                {/* Extra Close Button in Overlay */}
+                                <button
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className="absolute top-8 right-8 p-3 text-white/50 hover:text-white transition-colors"
+                                >
+                                    <X size={32} />
+                                </button>
+
                                 <div className="flex flex-col items-center justify-center gap-8 w-full px-6">
                                     {navLinks.map((link, i) => (
                                         <motion.a

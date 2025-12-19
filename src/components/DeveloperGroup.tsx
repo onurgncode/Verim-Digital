@@ -101,6 +101,31 @@ export function DeveloperGroup() {
                         </div>
 
                         <div className="space-y-6">
+                            {/* WhatsApp QR Code */}
+                            {/* WhatsApp QR Code - Premium Modern Redesign */}
+                            <div className="flex flex-col items-center justify-center mb-12 group/qr relative">
+                                {/* Glowing Backdrop */}
+                                <div className="absolute inset-0 bg-white/5 blur-[80px] rounded-full scale-50 group-hover/qr:scale-75 transition-transform duration-1000" />
+
+                                <div className="relative z-10 p-2 bg-white/[0.03] backdrop-blur-3xl rounded-[2.5rem] border border-white/10 shadow-2xl transition-all duration-700 group-hover/qr:border-white/20 group-hover/qr:bg-white/[0.05] group-hover/qr:-translate-y-3">
+                                    <div className="bg-white rounded-[2rem] p-4">
+                                        <img
+                                            src="/whatsapp-qr.png"
+                                            alt="WhatsApp Group QR Code"
+                                            className="w-44 h-44 md:w-56 md:h-56 object-contain"
+                                        />
+                                    </div>
+
+                                    {/* Inner Glass Glow */}
+                                    <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white/[0.05] to-transparent pointer-events-none rounded-b-[2.5rem]" />
+                                </div>
+
+                                <div className="mt-6 text-center space-y-1">
+                                    <p className="text-white font-bold text-sm tracking-tight">Hızlı Erişim</p>
+                                    <p className="text-white/30 text-[10px] uppercase tracking-[0.4em] font-light">Kameranızı Okutun</p>
+                                </div>
+                            </div>
+
                             <motion.a
                                 href="https://chat.whatsapp.com/HaIOsLlNShr6znwTMnOU5E"
                                 target="_blank"
