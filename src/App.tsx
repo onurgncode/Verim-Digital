@@ -9,6 +9,16 @@ import { DottedSurface } from "./components/ui/dotted-surface"
 function App() {
     const [currentPage, setCurrentPage] = useState("home")
     const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const [isScrolled, setIsScrolled] = useState(false)
+
+    // Scroll listener for dynamic nav opacity
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 50)
+        }
+        window.addEventListener("scroll", handleScroll)
+        return () => window.removeEventListener("scroll", handleScroll)
+    }, [])
 
     // Simple "routing" based on hash or state
     useEffect(() => {
@@ -144,7 +154,10 @@ function App() {
                 <DottedSurface className="fixed inset-0 opacity-40 pointer-events-none" />
 
                 {/* Navigation */}
-                <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] md:w-max z-[60] bg-white/[0.03] backdrop-blur-2xl px-6 md:px-10 py-3 md:py-4 flex justify-between items-center rounded-full border border-white/10 shadow-2xl">
+                <nav className={`fixed top-0 left-0 w-full z-[60] backdrop-blur-md px-6 md:px-24 py-4 md:py-6 flex justify-between items-center border-b transition-all duration-500 ${isScrolled
+                    ? "bg-black/60 border-white/10 py-3 md:py-4 shadow-xl"
+                    : "bg-transparent border-transparent"
+                    }`}>
                     <div className="text-xl sm:text-2xl font-bold tracking-tighter relative z-50 mr-8 md:mr-12">
                         <a href="/" onClick={(e) => { e.preventDefault(); window.location.hash = ""; }}>VERIM <span className="text-white">DIGITAL</span></a>
                     </div>
