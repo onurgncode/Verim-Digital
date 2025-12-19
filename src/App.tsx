@@ -154,9 +154,12 @@ function App() {
                 <DottedSurface className="fixed inset-0 opacity-40 pointer-events-none" />
 
                 {/* Navigation */}
-                <nav className={`fixed top-6 left-1/2 -translate-x-1/2 w-[90%] md:w-max z-[60] backdrop-blur-2xl px-6 md:px-10 py-3 md:py-4 flex justify-between items-center rounded-full border transition-all duration-500 shadow-2xl ${isScrolled
-                    ? "bg-white/[0.01] border-white/5 py-2 md:py-3"
-                    : "bg-white/[0.05] border-white/10"
+                <nav className={`fixed z-[60] backdrop-blur-md transition-all duration-500 flex justify-between items-center
+                    top-0 left-0 w-full px-6 py-4 border-b
+                    md:top-6 md:left-1/2 md:-translate-x-1/2 md:w-max md:rounded-full md:border md:px-10 md:py-4 md:shadow-2xl
+                    ${isScrolled
+                        ? "bg-black/80 border-white/10 md:bg-white/[0.01] md:border-white/5 md:py-3"
+                        : "bg-transparent border-transparent md:bg-white/[0.05] md:border-white/10"
                     }`}>
                     <div className="text-xl sm:text-2xl font-bold tracking-tighter relative z-50 mr-8 md:mr-12">
                         <a href="/" onClick={(e) => { e.preventDefault(); window.location.hash = ""; }}>VERIM <span className="text-white">DIGITAL</span></a>
