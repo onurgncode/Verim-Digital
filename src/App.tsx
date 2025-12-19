@@ -5,6 +5,7 @@ import { Menu, X, BarChart3, Palette, Megaphone, Check, Globe, ArrowRight } from
 import { BackgroundPaths } from "./components/ui/background-paths"
 import { DeveloperGroup } from "./components/DeveloperGroup"
 import { DottedSurface } from "./components/ui/dotted-surface"
+import { GlowingEffect } from "./components/ui/glowing-effect"
 
 function App() {
     const [currentPage, setCurrentPage] = useState("home")
@@ -86,31 +87,34 @@ function App() {
                 <section id="services" className="py-20 md:py-32 px-6 md:px-24">
                     <h2 className="text-3xl md:text-6xl font-bold mb-16 md:mb-20 text-center tracking-tight">Neler Yapıyoruz?</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div className="glass p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] hover:border-white/20 transition-all group">
+                        <div className="glass p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] hover:border-white/20 transition-all group relative overflow-hidden">
+                            <GlowingEffect blur={0} spread={80} proximity={64} glow={true} disabled={false} />
                             <div
-                                className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                                className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform relative z-10">
                                 <BarChart3 className="w-6 h-6 text-white" />
                             </div>
-                            <h3 className="text-2xl font-bold mb-4">Dijital Strateji</h3>
-                            <p className="text-white/40 font-light leading-relaxed">Veriye dayalı pazarlama stratejileriyle markanızı hedef kitlesine
-                                ulaştırıyoruz.</p>
+                            <h3 className="text-2xl font-bold mb-4 relative z-10">Dijital Strateji</h3>
+                            <p className="text-white/40 font-light leading-relaxed relative z-10">Veriye dayalı pazarlama stratejileriyle markanızı hedef kitlesine
+                                ulaştırmıyoruz.</p>
                         </div>
-                        <div className="glass p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] hover:border-white/20 transition-all group">
+                        <div className="glass p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] hover:border-white/20 transition-all group relative overflow-hidden">
+                            <GlowingEffect blur={0} spread={80} proximity={64} glow={true} disabled={false} />
                             <div
-                                className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                                className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform relative z-10">
                                 <Palette className="w-6 h-6 text-white" />
                             </div>
-                            <h3 className="text-2xl font-bold mb-4">Yaratıcı Tasarım</h3>
-                            <p className="text-white/40 font-light leading-relaxed">Görsel kimliğinizi modern ve çarpıcı tasarımlarla yeniden inşa
+                            <h3 className="text-2xl font-bold mb-4 relative z-10">Yaratıcı Tasarım</h3>
+                            <p className="text-white/40 font-light leading-relaxed relative z-10">Görsel kimliğinizi modern ve çarpıcı tasarımlarla yeniden inşa
                                 ediyoruz.</p>
                         </div>
-                        <div className="glass p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] hover:border-white/20 transition-all group">
+                        <div className="glass p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] hover:border-white/20 transition-all group relative overflow-hidden">
+                            <GlowingEffect blur={0} spread={80} proximity={64} glow={true} disabled={false} />
                             <div
-                                className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                                className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform relative z-10">
                                 <Megaphone className="w-6 h-6 text-white" />
                             </div>
-                            <h3 className="text-2xl font-bold mb-4">Medya Yönetimi</h3>
-                            <p className="text-white/40 font-light leading-relaxed">Sosyal medya ve dijital kanallarda görünürlüğünüzü en üst seviyeye
+                            <h3 className="text-2xl font-bold mb-4 relative z-10">Medya Yönetimi</h3>
+                            <p className="text-white/40 font-light leading-relaxed relative z-10">Sosyal medya ve dijital kanallarda görünürlüğünüzü en üst seviyeye
                                 çıkarıyoruz.</p>
                         </div>
                     </div>
@@ -131,9 +135,10 @@ function App() {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     transition={{ delay: i * 0.1 }}
                                     viewport={{ once: true }}
-                                    className="glass p-6 md:p-8 rounded-[2rem] hover:border-white/20 transition-all group flex flex-col h-full"
+                                    className="glass p-6 md:p-8 rounded-[2rem] hover:border-white/20 transition-all group flex flex-col h-full relative overflow-hidden"
                                 >
-                                    <div className="aspect-[16/10] rounded-2xl overflow-hidden mb-6 bg-white/5 relative">
+                                    <GlowingEffect blur={0} spread={80} proximity={64} glow={true} disabled={false} />
+                                    <div className="aspect-[16/10] rounded-2xl overflow-hidden mb-6 bg-white/5 relative z-10">
                                         {post.thumbnail ? (
                                             <img src={post.thumbnail} alt={post.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                                         ) : (
@@ -143,8 +148,8 @@ function App() {
                                         )}
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
                                     </div>
-                                    <h4 className="text-xl font-bold mb-3 line-clamp-2 group-hover:text-white transition-colors">{post.title}</h4>
-                                    <div className="mt-auto flex items-center justify-between">
+                                    <h4 className="text-xl font-bold mb-3 line-clamp-2 group-hover:text-white transition-colors relative z-10">{post.title}</h4>
+                                    <div className="mt-auto flex items-center justify-between relative z-10">
                                         <span className="text-white/30 text-xs uppercase tracking-widest">{new Date(post.pubDate).toLocaleDateString()}</span>
                                         <ArrowRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-2 transition-all" />
                                     </div>
