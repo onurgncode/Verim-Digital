@@ -103,14 +103,8 @@ export function BackgroundPaths({
 
                     <div className="flex flex-wrap justify-center gap-4">
                         <a
-                            href="#portfolio"
-                            className="bg-white text-black font-bold px-8 py-4 rounded-xl hover:bg-white/90 transition-all hover:scale-105 active:scale-95 shadow-lg"
-                        >
-                            Projeleri Gör
-                        </a>
-                        <a
                             href="#services"
-                            className="glass px-8 py-4 rounded-xl hover:bg-white/20 border border-white/20 transition-all hover:scale-105 active:scale-95 text-white backdrop-blur-md"
+                            className="bg-white text-black font-bold px-8 py-4 rounded-xl hover:bg-white/90 transition-all hover:scale-105 active:scale-95 shadow-lg"
                         >
                             Hizmetlerimiz
                         </a>
