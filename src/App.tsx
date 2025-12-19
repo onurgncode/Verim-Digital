@@ -44,7 +44,6 @@ function App() {
     const navLinks = [
         { name: "Ana Sayfa", href: "/", id: "home" },
         { name: "Hizmetler", href: "#services", id: "services" },
-        { name: "Portfolyo", href: "#portfolio", id: "portfolio" },
         { name: "Developer Grup", href: "#group", id: "group" },
     ]
 
@@ -94,37 +93,6 @@ function App() {
                     </div>
                 </section>
 
-                {/* Portfolio Section */}
-                <section id="portfolio" className="py-20 md:py-32 px-6 md:px-24 bg-white/[0.02]">
-                    <div className="max-w-7xl mx-auto">
-                        <h2 className="text-3xl md:text-6xl font-bold mb-16 md:mb-20 tracking-tight">Seçili İşlerimiz</h2>
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            <div className="aspect-video glass rounded-3xl overflow-hidden relative group border-white/5">
-                                <div className="p-10 h-full flex flex-col justify-end">
-                                    <span className="text-white/40 text-xs font-bold uppercase tracking-widest mb-2">Sosyal Medya Yönetimi</span>
-                                    <h4 className="text-2xl font-bold">Saray Börekçisi</h4>
-                                </div>
-                            </div>
-                            <a href="#group" onClick={(e) => { e.preventDefault(); setCurrentPage("group"); window.location.hash = "group"; }}
-                                className="aspect-video glass rounded-3xl overflow-hidden relative group cursor-pointer border-white/5 transition-transform hover:scale-[1.02]">
-                                <div
-                                    className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-md">
-                                    <span className="font-bold text-black bg-white px-6 py-3 rounded-full">Ekibe Katıl</span>
-                                </div>
-                                <div className="p-10 h-full flex flex-col justify-end">
-                                    <span className="text-white/40 text-xs font-bold uppercase tracking-widest mb-2">Geliştirici Ekip</span>
-                                    <h4 className="text-2xl font-bold">Developer Grup</h4>
-                                </div>
-                            </a>
-                            <div className="aspect-video glass rounded-3xl overflow-hidden relative group border-white/5">
-                                <div className="p-10 h-full flex flex-col justify-end">
-                                    <span className="text-white/40 text-xs font-bold uppercase tracking-widest mb-2">Web3 & Blockchain</span>
-                                    <h4 className="text-2xl font-bold">Sui Network Mainnet Projesi</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
 
                 {/* Contact Section */}
                 <section id="contact" className="py-20 md:py-32 px-4 sm:px-6 md:px-24">
