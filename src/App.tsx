@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { ThemeProvider } from "next-themes"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, BarChart3, Palette, Megaphone, Check } from "lucide-react"
+import { Menu, X, BarChart3, Palette, Megaphone, Check, Globe, ArrowRight } from "lucide-react"
 import { BackgroundPaths } from "./components/ui/background-paths"
 import { DeveloperGroup } from "./components/DeveloperGroup"
 import { DottedSurface } from "./components/ui/dotted-surface"
@@ -12,6 +12,7 @@ function App() {
     const [isScrolled, setIsScrolled] = useState(false)
     const [isSending, setIsSending] = useState(false)
     const [isSent, setIsSent] = useState(false)
+    const [posts, setPosts] = useState<any[]>([])
 
     // Scroll listener for dynamic nav opacity
     useEffect(() => {
@@ -39,6 +40,22 @@ function App() {
         return () => window.removeEventListener("hashchange", handleHashChange)
     }, [])
 
+    // Fetch Medium Posts
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const res = await fetch("https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@verimdigital")
+                const data = await res.json()
+                if (data.status === "ok") {
+                    setPosts(data.items.slice(0, 3)) // Get last 3 posts
+                }
+            } catch (err) {
+                console.error("Medium fetch error:", err)
+            }
+        }
+        fetchPosts()
+    }, [])
+
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
 
     // Scroll to top on page change
@@ -49,6 +66,7 @@ function App() {
     const navLinks = [
         { name: "Ana Sayfa", href: "/", id: "home" },
         { name: "Hizmetler", href: "#services", id: "services" },
+        { name: "Blog", href: "#blog", id: "blog" },
         { name: "Developer Grup", href: "#group", id: "group" },
     ]
 
@@ -94,6 +112,52 @@ function App() {
                             <h3 className="text-2xl font-bold mb-4">Medya Yönetimi</h3>
                             <p className="text-white/40 font-light leading-relaxed">Sosyal medya ve dijital kanallarda görünürlüğünüzü en üst seviyeye
                                 çıkarıyoruz.</p>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Blog Section */}
+                <section id="blog" className="py-20 md:py-32 px-6 md:px-24 bg-white/[0.02]">
+                    <div className="max-w-7xl mx-auto">
+                        <h2 className="text-3xl md:text-6xl font-bold mb-16 md:mb-20 tracking-tight">Medium <span className="text-gradient">Blog</span>.</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            {posts.length > 0 ? posts.map((post, i) => (
+                                <motion.a
+                                    key={i}
+                                    href={post.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    initial={{ opacity: 0, y: 30 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: i * 0.1 }}
+                                    viewport={{ once: true }}
+                                    className="glass p-6 md:p-8 rounded-[2rem] hover:border-white/20 transition-all group flex flex-col h-full"
+                                >
+                                    <div className="aspect-[16/10] rounded-2xl overflow-hidden mb-6 bg-white/5 relative">
+                                        {post.thumbnail ? (
+                                            <img src={post.thumbnail} alt={post.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center opacity-20">
+                                                <Globe className="w-12 h-12" />
+                                            </div>
+                                        )}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+                                    </div>
+                                    <h4 className="text-xl font-bold mb-3 line-clamp-2 group-hover:text-white transition-colors">{post.title}</h4>
+                                    <div className="mt-auto flex items-center justify-between">
+                                        <span className="text-white/30 text-xs uppercase tracking-widest">{new Date(post.pubDate).toLocaleDateString()}</span>
+                                        <ArrowRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-2 transition-all" />
+                                    </div>
+                                </motion.a>
+                            )) : (
+                                [1, 2, 3].map((skeleton) => (
+                                    <div key={skeleton} className="glass p-8 rounded-[2rem] h-[400px] animate-pulse flex flex-col">
+                                        <div className="aspect-video rounded-xl bg-white/5 mb-6" />
+                                        <div className="h-6 w-3/4 bg-white/10 rounded mb-4" />
+                                        <div className="h-4 w-1/2 bg-white/5 rounded mt-auto" />
+                                    </div>
+                                ))
+                            )}
                         </div>
                     </div>
                 </section>

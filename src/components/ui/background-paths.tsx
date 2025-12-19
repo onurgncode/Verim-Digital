@@ -76,10 +76,10 @@ export function BackgroundPaths({
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
-                        className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/10 backdrop-blur-md mb-8 hover:bg-white/[0.05] transition-colors cursor-default group"
+                        className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded-full bg-white/[0.03] border border-white/10 backdrop-blur-md mb-6 sm:mb-8 hover:bg-white/[0.05] transition-colors cursor-default group"
                     >
-                        <Moon className="w-3.5 h-3.5 text-white/40 group-hover:text-white transition-colors" />
-                        <span className="text-[10px] uppercase tracking-[0.2em] text-white/40 group-hover:text-white transition-colors font-medium">En iyi deneyim için karanlık modu açın</span>
+                        <Moon className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-white/40 group-hover:text-white transition-colors" />
+                        <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-white/40 group-hover:text-white transition-colors font-medium">Karanlık modu açın</span>
                     </motion.div>
 
                     <h1 className="text-4xl sm:text-7xl md:text-8xl font-bold mb-8 tracking-tighter leading-[1.1]">
