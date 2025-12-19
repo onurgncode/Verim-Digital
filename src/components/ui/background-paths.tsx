@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Moon } from "lucide-react";
 
 function FloatingPaths({ position }: { position: number }) {
     const paths = Array.from({ length: 36 }, (_, i) => ({
@@ -71,6 +72,16 @@ export function BackgroundPaths({
                     transition={{ duration: 2 }}
                     className="max-w-4xl mx-auto"
                 >
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/10 backdrop-blur-md mb-8 hover:bg-white/[0.05] transition-colors cursor-default group"
+                    >
+                        <Moon className="w-3.5 h-3.5 text-white/40 group-hover:text-white transition-colors" />
+                        <span className="text-[10px] uppercase tracking-[0.2em] text-white/40 group-hover:text-white transition-colors font-medium">En iyi deneyim için karanlık modu açın</span>
+                    </motion.div>
+
                     <h1 className="text-4xl sm:text-7xl md:text-8xl font-bold mb-8 tracking-tighter leading-[1.1]">
                         {words.map((word, wordIndex) => (
                             <span
