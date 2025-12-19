@@ -19,7 +19,7 @@ export function DeveloperGroup() {
                     transition={{ duration: 0.8, delay: 0.2 }}
                     className="text-lg md:text-xl text-white/50 max-w-3xl mx-auto font-light"
                 >
-                    Tek başına değil, bir toplulukla birlikte büyü. 21 gün boyunca her gün GitHub'a push yap, disiplin kazan ve Core Developer ekibimize dahil olma şansı yakala.
+                    Tek başına değil, bir toplulukla birlikte büyü. 21 gün boyunca her gün GitHub'a push yap, disiplin kazan ve toplulukla beraber kendini geliştirip yeni networkler edin.
                 </motion.p>
             </div>
 
@@ -87,7 +87,7 @@ export function DeveloperGroup() {
                                     {[
                                         "GitHub'ında 21 günlük yeşil kareler.",
                                         "Global projelere entegrasyon fırsatı.",
-                                        "Core Developer Team'e giriş şansı.",
+                                        "Toplulukla beraber kendini geliştirme şansı.",
                                         "Blockchain ve Web3 dünyasına ilk adım.",
                                         "Profesyonel network ve dayanışma."
                                     ].map((item, i) => (
