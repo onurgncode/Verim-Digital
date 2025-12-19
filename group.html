@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Developer Grup | Verim Digital</title>
+    <!-- Google Fonts: Outfit and Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Outfit:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="bg-brand-black text-white selection:bg-white/20">
+    <canvas id="three-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass px-6 py-4 flex justify-between items-center bg-black/50">
+        <div class="text-2xl font-bold tracking-tighter">
+            <a href="/">VERIM <span class="text-white">DIGITAL</span></a>
+        </div>
+        <div class="hidden md:flex gap-8 text-sm font-semibold tracking-wide uppercase">
+            <a href="/" class="hover:text-white transition-colors">Ana Sayfa</a>
+            <a href="/#services" class="hover:text-white transition-colors">Hizmetler</a>
+            <a href="/#portfolio" class="hover:text-white transition-colors">Portfolyo</a>
+            <a href="group.html" class="text-white border-b border-white">Developer Grup</a>
+        </div>
+    </nav>
+
+    <main class="pt-32 pb-20 px-6 md:px-24">
+        <div class="max-w-7xl mx-auto text-center mb-16">
+            <h1 class="text-5xl md:text-7xl font-black mb-6 tracking-tighter" data-gsap="page-title">
+                Geleceği <span class="text-gradient">Birlikte</span> İnşa Edelim.
+            </h1>
+            <p class="text-lg md:text-xl text-brand-light/50 max-w-3xl mx-auto font-light" data-gsap="page-sub">
+                Developer ekosistemimize katılarak blockchain ve web teknolojilerinde yeni bir döneme adım atın. Size en
+                uygun yolu seçin.
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+            <!-- Option 1: Challenge Oriented -->
+            <div class="glass p-10 md:p-14 rounded-[3rem] border-white/10 hover:border-white/20 transition-all group"
+                data-gsap="group-card">
+                <div class="mb-8">
+                    <span
+                        class="bg-white/5 text-white/60 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest border border-white/5">Seçenek
+                        1: Meydan Okuma Odaklı</span>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 tracking-tight">🚀 21 Gün Zinciri Kırma | Blockchain Devs
+                </h2>
+                <p class="text-brand-light/60 mb-8 font-light leading-relaxed">
+                    Hoş geldiniz! 👋 [Etkinlik Adı] standımızda tanıştığımız, geleceği kodlamaya hazır geliştiricilerin
+                    toplandığı yerdesiniz.
+                </p>
+                <div class="flex items-center gap-4 mb-10">
+                    <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="block text-white font-bold">🎯 Hedef</span>
+                        <span class="text-sm text-white/40">21 gün aralıksız kod yazmak ve alışkanlık edinmek.</span>
+                    </div>
+                </div>
+                <a href="https://chat.whatsapp.com/..." target="_blank"
+                    class="block w-full bg-white text-black font-black py-5 rounded-2xl hover:bg-brand-light transition-all uppercase tracking-widest text-center active:scale-95">Gruba
+                    Katıl</a>
+            </div>
+
+            <!-- Option 2: Professional Oriented -->
+            <div class="glass p-10 md:p-14 rounded-[3rem] border-white/10 hover:border-white/20 transition-all group"
+                data-gsap="group-card">
+                <div class="mb-8">
+                    <span
+                        class="bg-white/5 text-white/60 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest border border-white/5">Seçenek
+                        2: Topluluk ve Kariyer Odaklı</span>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 tracking-tight">💻 Core Developer Team - 21 Day Sprint
+                </h2>
+                <p class="text-brand-light/60 mb-8 font-light leading-relaxed">
+                    Burası sadece bir WhatsApp grubu değil, blockchain ekosistemine girecek yeni çekirdek kadronun
+                    toplanma alanıdır.
+                </p>
+
+                <ul class="space-y-4 mb-10 text-brand-light/50 font-light">
+                    <li class="flex gap-3">
+                        <span class="text-white">💡</span> Günlük teknik görevler ve mentorluk.
+                    </li>
+                    <li class="flex gap-3">
+                        <span class="text-white">🤝</span> Birebir takip ve destek.
+                    </li>
+                    <li class="flex gap-3">
+                        <span class="text-white">🌍</span> Global ekosisteme entegrasyon fırsatı.
+                    </li>
+                </ul>
+
+                <div class="p-6 bg-white/5 rounded-2xl mb-10 border border-white/5">
+                    <span class="block text-white font-bold mb-2">⚠️ Önemli</span>
+                    <p class="text-sm text-white/40 leading-relaxed">Süreklilik esastır. Başarı oranımızı %100'e taşımak
+                        için birbirimize destek oluyoruz.</p>
+                </div>
+
+                <a href="https://chat.whatsapp.com/..." target="_blank"
+                    class="block w-full bg-white text-black font-black py-5 rounded-2xl hover:bg-brand-light transition-all uppercase tracking-widest text-center active:scale-95 font-heading">Sprinti
+                    Başlat</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="py-16 border-t border-white/5 text-center text-white/20 text-sm">
+        <p>&copy; 2025 Verim Digital. Tüm hakları saklıdır.</p>
+    </footer>
+
+    <script type="module" src="/src/group.js"></script>
+</body>
+
+</html>
