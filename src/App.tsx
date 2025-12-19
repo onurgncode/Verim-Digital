@@ -41,6 +41,11 @@ function App() {
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
 
+    // Scroll to top on page change
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [currentPage])
+
     const navLinks = [
         { name: "Ana Sayfa", href: "/", id: "home" },
         { name: "Hizmetler", href: "#services", id: "services" },
