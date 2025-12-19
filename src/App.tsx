@@ -27,7 +27,12 @@ function App() {
     // Simple "routing" based on hash or state
     useEffect(() => {
         const handleHashChange = () => {
-            if (window.location.hash === "#group") {
+            const path = window.location.pathname;
+            const hash = window.location.hash;
+
+            if (path !== "/" && path !== "" && path !== "/index.html") {
+                setCurrentPage("404")
+            } else if (hash === "#group") {
                 setCurrentPage("group")
             } else {
                 setCurrentPage("home")
@@ -247,6 +252,39 @@ function App() {
                         </AnimatePresence>
                     </div>
                 </section>
+            </main>
+        )
+    }
+
+    const renderNotFound = () => {
+        return (
+            <main className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black py-20">
+                <div className="absolute inset-0 z-0">
+                    <BackgroundPaths title="404" />
+                </div>
+
+                <div className="relative z-10 text-center px-6">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                    >
+                        <h2 className="text-4xl md:text-6xl font-black mb-6 tracking-tight">Kayıp mı <span className="text-gradient">Oldunuz?</span></h2>
+                        <p className="text-white/40 mb-12 text-lg md:text-xl font-light max-w-lg mx-auto">Aradığınız sayfa başka bir boyuta geçmiş olabilir. Dijital dünyaya geri dönelim.</p>
+
+                        <a
+                            href="/"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                window.history.pushState({}, "", "/");
+                                setCurrentPage("home");
+                            }}
+                            className="inline-block bg-white text-black font-black px-10 py-5 rounded-2xl hover:bg-neutral-200 transition-all uppercase tracking-widest text-lg active:scale-95 shadow-2xl"
+                        >
+                            Ana Sayfaya Dön
+                        </a>
+                    </motion.div>
+                </div>
             </main>
         )
     }
