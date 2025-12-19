@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { ThemeProvider } from "next-themes"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, BarChart3, Palette, Megaphone } from "lucide-react"
+import { Menu, X, BarChart3, Palette, Megaphone, Check } from "lucide-react"
 import { BackgroundPaths } from "./components/ui/background-paths"
 import { DeveloperGroup } from "./components/DeveloperGroup"
 import { DottedSurface } from "./components/ui/dotted-surface"
@@ -10,6 +10,8 @@ function App() {
     const [currentPage, setCurrentPage] = useState("home")
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [isScrolled, setIsScrolled] = useState(false)
+    const [isSending, setIsSending] = useState(false)
+    const [isSent, setIsSent] = useState(false)
 
     // Scroll listener for dynamic nav opacity
     useEffect(() => {
@@ -126,20 +128,81 @@ function App() {
 
                 {/* Contact Section */}
                 <section id="contact" className="py-20 md:py-32 px-4 sm:px-6 md:px-24">
-                    <div className="max-w-5xl mx-auto glass p-8 sm:p-12 md:p-20 rounded-[2rem] md:rounded-[4rem] text-center border-white/10 bg-white/[0.02]">
-                        <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-6 sm:mb-8 tracking-tight">Birlikte <span className="text-gradient">Büyüyelim</span>.</h2>
-                        <p className="text-white/30 mb-8 sm:mb-12 text-base sm:text-lg md:text-xl font-light">Projenizi anlatın, markanızı zirveye taşıyalım.</p>
-                        <form className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 text-left">
-                            <input type="text" placeholder="Adınız"
-                                className="bg-white/[0.03] border border-white/10 rounded-xl sm:rounded-2xl px-6 sm:px-8 py-4 sm:py-5 focus:outline-none focus:border-white/40 transition-colors placeholder:text-white/20 text-sm sm:text-base" />
-                            <input type="email" placeholder="E-posta"
-                                className="bg-white/[0.03] border border-white/10 rounded-xl sm:rounded-2xl px-6 sm:px-8 py-4 sm:py-5 focus:outline-none focus:border-white/40 transition-colors placeholder:text-white/20 text-sm sm:text-base" />
-                            <textarea placeholder="Mesajınız"
-                                className="md:col-span-2 bg-white/[0.03] border border-white/10 rounded-xl sm:rounded-2xl px-6 sm:px-8 py-4 sm:py-5 h-32 sm:h-40 focus:outline-none focus:border-white/40 transition-colors placeholder:text-white/20 text-sm sm:text-base"></textarea>
-                            <button
-                                type="button"
-                                className="md:col-span-2 bg-white text-black font-black py-4 sm:py-5 rounded-xl sm:rounded-2xl hover:bg-neutral-200 transition-all uppercase tracking-widest text-base sm:text-lg active:scale-95">Gönder</button>
-                        </form>
+                    <div className="max-w-5xl mx-auto glass p-8 sm:p-12 md:p-20 rounded-[2rem] md:rounded-[4rem] text-center border-white/10 bg-white/[0.02] relative overflow-hidden">
+                        <AnimatePresence mode="wait">
+                            {!isSent ? (
+                                <motion.div
+                                    key="form"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, scale: 0.95 }}
+                                >
+                                    <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-6 sm:mb-8 tracking-tight">Birlikte <span className="text-gradient">Büyüyelim</span>.</h2>
+                                    <p className="text-white/30 mb-8 sm:mb-12 text-base sm:text-lg md:text-xl font-light">Projenizi anlatın, markanızı zirveye taşıyalım.</p>
+                                    <form
+                                        onSubmit={async (e) => {
+                                            e.preventDefault();
+                                            setIsSending(true);
+
+                                            const formData = new FormData(e.currentTarget);
+                                            try {
+                                                const response = await fetch("https://formspree.io/f/xaqwqnen", {
+                                                    method: "POST",
+                                                    body: formData,
+                                                    headers: {
+                                                        'Accept': 'application/json'
+                                                    }
+                                                });
+
+                                                if (response.ok) {
+                                                    setIsSent(true);
+                                                }
+                                            } catch (error) {
+                                                console.error("Submission error:", error);
+                                            } finally {
+                                                setIsSending(false);
+                                            }
+                                        }}
+                                        className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 text-left"
+                                    >
+                                        <input type="text" name="name" required placeholder="Adınız"
+                                            className="bg-white/[0.03] border border-white/10 rounded-xl sm:rounded-2xl px-6 sm:px-8 py-4 sm:py-5 focus:outline-none focus:border-white/40 transition-colors placeholder:text-white/20 text-sm sm:text-base" />
+                                        <input type="email" name="email" required placeholder="E-posta"
+                                            className="bg-white/[0.03] border border-white/10 rounded-xl sm:rounded-2xl px-6 sm:px-8 py-4 sm:py-5 focus:outline-none focus:border-white/40 transition-colors placeholder:text-white/20 text-sm sm:text-base" />
+                                        <textarea name="message" required placeholder="Mesajınız"
+                                            className="md:col-span-2 bg-white/[0.03] border border-white/10 rounded-xl sm:rounded-2xl px-6 sm:px-8 py-4 sm:py-5 h-32 sm:h-40 focus:outline-none focus:border-white/40 transition-colors placeholder:text-white/20 text-sm sm:text-base"></textarea>
+                                        <button
+                                            disabled={isSending}
+                                            type="submit"
+                                            className="md:col-span-2 bg-white text-black font-black py-4 sm:py-5 rounded-xl sm:rounded-2xl hover:bg-neutral-200 transition-all uppercase tracking-widest text-base sm:text-lg active:scale-95 flex items-center justify-center gap-3 disabled:opacity-50">
+                                            {isSending ? (
+                                                <>
+                                                    <span className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></span>
+                                                    Gönderiliyor...
+                                                </>
+                                            ) : "Gönder"}
+                                        </button>
+                                    </form>
+                                </motion.div>
+                            ) : (
+                                <motion.div
+                                    key="success"
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    className="py-12 flex flex-col items-center"
+                                >
+                                    <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mb-6 shadow-2xl shadow-green-500/20">
+                                        <Check size={40} className="text-white" />
+                                    </div>
+                                    <h3 className="text-3xl font-bold mb-2">Mesajınız Alındı!</h3>
+                                    <p className="text-white/50 mb-8">En kısa sürede size geri dönüş yapacağız.</p>
+                                    <button
+                                        onClick={() => setIsSent(false)}
+                                        className="text-white/30 hover:text-white underline underline-offset-4 text-sm transition-colors"
+                                    >Yeni bir mesaj gönder</button>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
                 </section>
             </main>
