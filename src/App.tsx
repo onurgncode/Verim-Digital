@@ -125,20 +125,20 @@ function App() {
                 </section>
 
                 {/* Contact Section */}
-                <section id="contact" className="py-20 md:py-32 px-6 md:px-24">
-                    <div className="max-w-5xl mx-auto glass p-8 md:p-20 rounded-[2rem] md:rounded-[4rem] text-center border-white/10 bg-white/[0.02]">
-                        <h2 className="text-3xl md:text-6xl font-bold mb-8 tracking-tight">Birlikte <span className="text-gradient">Büyüyelim</span>.</h2>
-                        <p className="text-white/30 mb-12 text-lg md:text-xl font-light">Projenizi anlatın, markanızı zirveye taşıyalım.</p>
-                        <form className="grid md:grid-cols-2 gap-6 text-left">
+                <section id="contact" className="py-20 md:py-32 px-4 sm:px-6 md:px-24">
+                    <div className="max-w-5xl mx-auto glass p-8 sm:p-12 md:p-20 rounded-[2rem] md:rounded-[4rem] text-center border-white/10 bg-white/[0.02]">
+                        <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-6 sm:mb-8 tracking-tight">Birlikte <span className="text-gradient">Büyüyelim</span>.</h2>
+                        <p className="text-white/30 mb-8 sm:mb-12 text-base sm:text-lg md:text-xl font-light">Projenizi anlatın, markanızı zirveye taşıyalım.</p>
+                        <form className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 text-left">
                             <input type="text" placeholder="Adınız"
-                                className="bg-white/[0.03] border border-white/10 rounded-2xl px-8 py-5 focus:outline-none focus:border-white/40 transition-colors placeholder:text-white/20" />
+                                className="bg-white/[0.03] border border-white/10 rounded-xl sm:rounded-2xl px-6 sm:px-8 py-4 sm:py-5 focus:outline-none focus:border-white/40 transition-colors placeholder:text-white/20 text-sm sm:text-base" />
                             <input type="email" placeholder="E-posta"
-                                className="bg-white/[0.03] border border-white/10 rounded-2xl px-8 py-5 focus:outline-none focus:border-white/40 transition-colors placeholder:text-white/20" />
+                                className="bg-white/[0.03] border border-white/10 rounded-xl sm:rounded-2xl px-6 sm:px-8 py-4 sm:py-5 focus:outline-none focus:border-white/40 transition-colors placeholder:text-white/20 text-sm sm:text-base" />
                             <textarea placeholder="Mesajınız"
-                                className="md:col-span-2 bg-white/[0.03] border border-white/10 rounded-2xl px-8 py-5 h-40 focus:outline-none focus:border-white/40 transition-colors placeholder:text-white/20"></textarea>
+                                className="md:col-span-2 bg-white/[0.03] border border-white/10 rounded-xl sm:rounded-2xl px-6 sm:px-8 py-4 sm:py-5 h-32 sm:h-40 focus:outline-none focus:border-white/40 transition-colors placeholder:text-white/20 text-sm sm:text-base"></textarea>
                             <button
                                 type="button"
-                                className="md:col-span-2 bg-white text-black font-black py-5 rounded-2xl hover:bg-neutral-200 transition-all uppercase tracking-widest text-lg active:scale-95">Gönder</button>
+                                className="md:col-span-2 bg-white text-black font-black py-4 sm:py-5 rounded-xl sm:rounded-2xl hover:bg-neutral-200 transition-all uppercase tracking-widest text-base sm:text-lg active:scale-95">Gönder</button>
                         </form>
                     </div>
                 </section>
