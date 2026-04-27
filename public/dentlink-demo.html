@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DentLink — Hekim & Laboratuvar Platformu (Demo)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal-900:#0D3B3A;
+    --teal-800:#114B49;
+    --teal-700:#1A6360;
+    --teal-100:#D6E5E3;
+    --teal-50:#EDF4F3;
+    --gold:#C9A961;
+    --gold-soft:#E8D5A4;
+    --cream:#F5EFE5;
+    --cream-2:#FAF5EB;
+    --white:#FFFFFF;
+    --ink:#0F1F1E;
+    --muted:#6B7B7A;
+    --line:#E2D9C8;
+    --danger:#C44536;
+    --success:#3F8F5C;
+    --warning:#D69243;
+    --r-sm:6px;
+    --r:10px;
+    --r-lg:16px;
+    --r-xl:22px;
+    --shadow-sm:0 1px 2px rgba(13,59,58,.06);
+    --shadow:0 4px 16px rgba(13,59,58,.08);
+    --shadow-lg:0 24px 48px -12px rgba(13,59,58,.18);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+
+  /* ───────── Top Bar (Demo controls) ───────── */
+  .demo-bar{
+    position:sticky;top:0;z-index:100;
+    background:var(--teal-900);color:var(--cream-2);
+    padding:10px 22px;display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid #062322;
+  }
+  .demo-bar .brand{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-weight:600;font-size:18px;letter-spacing:-.01em}
+  .demo-bar .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px rgba(201,169,97,.18)}
+  .demo-bar .brand small{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:400;color:var(--gold-soft);background:rgba(255,255,255,.06);padding:3px 8px;border-radius:4px;letter-spacing:.06em;text-transform:uppercase}
+  .screen-tabs{display:flex;gap:4px;flex-wrap:wrap}
+  .screen-tabs button{
+    background:transparent;border:1px solid rgba(255,255,255,.12);color:var(--cream-2);
+    padding:6px 12px;border-radius:999px;font:inherit;font-size:12px;cursor:pointer;
+    transition:all .15s ease;
+  }
+  .screen-tabs button:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2)}
+  .screen-tabs button.active{background:var(--gold);color:var(--teal-900);border-color:var(--gold);font-weight:600}
+
+  /* ───────── App frame ───────── */
+  .app{max-width:1400px;margin:0 auto;padding:24px}
+  .screen{display:none;animation:fadeIn .35s ease}
+  .screen.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* ───────── Reusable components ───────── */
+  .card{background:var(--white);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);border:1px solid var(--line)}
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:500;letter-spacing:.02em}
+  .pill.bekliyor{background:#FDF1DD;color:#8A5A1F}
+  .pill.uretimde{background:#E0EBF7;color:#1F4A8A}
+  .pill.tamamlandi{background:#DDEFE3;color:#1F5C36}
+  .pill.iptal{background:#F7DDD9;color:#8A1F1F}
+  .pill .dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+
+  .btn{font:inherit;font-weight:500;cursor:pointer;border:none;padding:10px 16px;border-radius:var(--r);transition:all .15s ease;display:inline-flex;align-items:center;gap:8px}
+  .btn-primary{background:var(--teal-900);color:var(--cream-2)}
+  .btn-primary:hover{background:var(--teal-800);transform:translateY(-1px);box-shadow:var(--shadow)}
+  .btn-gold{background:var(--gold);color:var(--teal-900);font-weight:600}
+  .btn-gold:hover{background:#B89651;transform:translateY(-1px)}
+  .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .btn-ghost:hover{background:var(--cream-2);border-color:var(--teal-700)}
+  .btn-sm{padding:6px 12px;font-size:12px}
+
+  .input,.select{font:inherit;width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r);background:var(--white);transition:border-color .15s,box-shadow .15s}
+  .input:focus,.select:focus{outline:none;border-color:var(--teal-700);box-shadow:0 0 0 3px rgba(26,99,96,.12)}
+
+  .label{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:6px;display:block}
+
+  /* ───────── LANDING ───────── */
+  .landing{
+    background:linear-gradient(180deg,var(--cream) 0%,var(--cream-2) 100%);
+    border-radius:var(--r-xl);overflow:hidden;border:1px solid var(--line);
+    position:relative;
+  }
+  .landing::before{
+    content:"";position:absolute;inset:0;background:
+      radial-gradient(800px 400px at 90% -10%,rgba(201,169,97,.18),transparent 60%),
+      radial-gradient(500px 350px at -10% 110%,rgba(26,99,96,.12),transparent 60%);
+    pointer-events:none;
+  }
+  .landing-hero{padding:60px 60px 40px;display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;position:relative}
+  .landing-hero .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal-800);background:var(--teal-50);padding:6px 12px;border-radius:999px;border:1px solid var(--teal-100);margin-bottom:20px}
+  .landing-hero h1{font-family:'Fraunces',serif;font-size:54px;line-height:1.05;letter-spacing:-.02em;font-weight:500;color:var(--teal-900);margin-bottom:18px}
+  .landing-hero h1 em{font-style:italic;color:var(--gold);font-weight:400}
+  .landing-hero p{font-size:16px;color:var(--muted);max-width:520px;margin-bottom:28px;line-height:1.65}
+  .landing-cta{display:flex;gap:12px;align-items:center}
+  .landing-stats{margin-top:36px;display:flex;gap:32px;padding-top:24px;border-top:1px dashed var(--line)}
+  .landing-stats div span:first-child{font-family:'Fraunces',serif;font-size:28px;font-weight:600;color:var(--teal-900);display:block}
+  .landing-stats div span:last-child{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+
+  .hero-visual{
+    background:var(--teal-900);border-radius:var(--r-xl);padding:32px;color:var(--cream-2);
+    position:relative;overflow:hidden;
+    box-shadow:var(--shadow-lg);
+    transform:rotate(1.2deg);
+  }
+  .hero-visual::after{content:"";position:absolute;inset:0;background:radial-gradient(400px 200px at 100% 0%,rgba(201,169,97,.18),transparent);pointer-events:none}
+  .hero-visual h3{font-family:'Fraunces',serif;font-size:14px;font-weight:500;color:var(--gold-soft);margin-bottom:18px;letter-spacing:.04em;text-transform:uppercase}
+  .hero-job{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(8px)}
+  .hero-job .name{font-weight:500}
+  .hero-job .meta{font-size:11px;color:var(--gold-soft);font-family:'JetBrains Mono',monospace;margin-top:4px}
+
+  .features{padding:0 60px 60px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;position:relative}
+  .feature{padding:24px;background:var(--white);border-radius:var(--r-lg);border:1px solid var(--line)}
+  .feature .icon{width:38px;height:38px;border-radius:10px;background:var(--teal-50);display:grid;place-items:center;color:var(--teal-800);margin-bottom:14px}
+  .feature h4{font-family:'Fraunces',serif;font-size:18px;font-weight:600;margin-bottom:6px;color:var(--teal-900)}
+  .feature p{font-size:13px;color:var(--muted);line-height:1.6}
+
+  /* ───────── AUTH ───────── */
+  .auth-wrap{display:grid;grid-template-columns:1fr 1fr;gap:32px;min-height:600px}
+  .auth-art{
+    background:var(--teal-900);border-radius:var(--r-xl);padding:48px;color:var(--cream-2);
+    display:flex;flex-direction:column;justify-content:space-between;
+    background-image:radial-gradient(600px 300px at 110% -10%,rgba(201,169,97,.2),transparent 60%);
+    position:relative;overflow:hidden;
+  }
+  .auth-art h2{font-family:'Fraunces',serif;font-size:40px;line-height:1.1;font-weight:500;letter-spacing:-.01em}
+  .auth-art h2 em{color:var(--gold);font-style:italic}
+  .auth-art .quote{margin-top:28px;font-size:14px;color:var(--gold-soft);font-style:italic;border-left:2px solid var(--gold);padding-left:14px;max-width:380px;line-height:1.6}
+  .auth-grid-deco{
+    position:absolute;right:-40px;bottom:-40px;width:280px;height:280px;
+    background:repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(201,169,97,.08) 10px,rgba(201,169,97,.08) 11px);
+    border-radius:50%;
+  }
+
+  .auth-form{padding:48px}
+  .auth-tabs{display:flex;gap:4px;background:var(--cream-2);padding:4px;border-radius:var(--r);margin-bottom:28px;width:fit-content}
+  .auth-tabs button{padding:8px 18px;border:none;background:transparent;border-radius:var(--r-sm);font:inherit;font-size:13px;cursor:pointer;color:var(--muted);transition:all .15s}
+  .auth-tabs button.active{background:var(--white);color:var(--teal-900);font-weight:600;box-shadow:var(--shadow-sm)}
+  .auth-form h3{font-family:'Fraunces',serif;font-size:32px;font-weight:500;margin-bottom:8px;letter-spacing:-.01em;color:var(--teal-900)}
+  .auth-form .sub{color:var(--muted);margin-bottom:28px;font-size:14px}
+  .form-row{margin-bottom:14px}
+  .form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .auth-form .btn{width:100%;justify-content:center;padding:12px;margin-top:8px}
+  .auth-form .alt{text-align:center;margin-top:18px;color:var(--muted);font-size:13px}
+  .auth-form .alt a{color:var(--teal-800);font-weight:600;text-decoration:none}
+
+  /* ───────── DASHBOARD LAYOUT ───────── */
+  .dash{display:grid;grid-template-columns:240px 1fr;gap:20px;min-height:620px}
+  .sidebar{
+    background:var(--white);border-radius:var(--r-lg);padding:20px;border:1px solid var(--line);
+    display:flex;flex-direction:column;
+  }
+  .side-brand{display:flex;align-items:center;gap:10px;padding:6px 8px 18px;border-bottom:1px solid var(--line);margin-bottom:14px}
+  .side-brand .logo{width:36px;height:36px;border-radius:10px;background:var(--teal-900);color:var(--gold);display:grid;place-items:center;font-family:'Fraunces',serif;font-weight:700;font-size:18px}
+  .side-brand .name{font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--teal-900)}
+  .side-brand .role{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-family:'JetBrains Mono',monospace}
+  .nav{display:flex;flex-direction:column;gap:2px}
+  .nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r);color:var(--ink);text-decoration:none;font-size:13px;font-weight:500;cursor:pointer;transition:all .12s}
+  .nav a:hover{background:var(--cream-2)}
+  .nav a.active{background:var(--teal-50);color:var(--teal-900);font-weight:600}
+  .nav a .ico{width:16px;height:16px}
+  .nav-section{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:14px 12px 6px;font-family:'JetBrains Mono',monospace}
+  .side-foot{margin-top:auto;padding-top:14px;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px}
+  .avatar{width:36px;height:36px;border-radius:10px;background:var(--gold-soft);color:var(--teal-900);display:grid;place-items:center;font-weight:600;font-family:'Fraunces',serif}
+  .side-foot .nm{font-size:13px;font-weight:600}
+  .side-foot .em{font-size:11px;color:var(--muted)}
+
+  .main{display:flex;flex-direction:column;gap:18px}
+  .topbar{background:var(--white);border:1px solid var(--line);border-radius:var(--r-lg);padding:14px 20px;display:flex;justify-content:space-between;align-items:center}
+  .crumb{font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+  .crumb b{color:var(--teal-900);font-weight:500}
+  .topbar h2{font-family:'Fraunces',serif;font-size:24px;font-weight:500;color:var(--teal-900);letter-spacing:-.01em;margin-top:2px}
+  .topbar-actions{display:flex;gap:10px;align-items:center}
+
+  .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .stat{background:var(--white);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px}
+  .stat .lab{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-family:'JetBrains Mono',monospace}
+  .stat .val{font-family:'Fraunces',serif;font-size:32px;font-weight:600;color:var(--teal-900);margin-top:4px;letter-spacing:-.02em}
+  .stat .delta{font-size:11px;color:var(--success);margin-top:4px}
+  .stat.accent{background:var(--teal-900);color:var(--cream-2);border-color:var(--teal-900)}
+  .stat.accent .lab{color:var(--gold-soft)}
+  .stat.accent .val{color:var(--cream-2)}
+  .stat.accent .delta{color:var(--gold)}
+
+  /* ───────── TABLE ───────── */
+  .panel{background:var(--white);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden}
+  .panel-head{padding:18px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line)}
+  .panel-head h3{font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--teal-900)}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  thead th{text-align:left;padding:12px 20px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:500;background:var(--cream-2);border-bottom:1px solid var(--line);font-family:'JetBrains Mono',monospace}
+  tbody td{padding:14px 20px;border-bottom:1px solid var(--line)}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:var(--cream-2)}
+  td .name{font-weight:600}
+  td .sub{font-size:11px;color:var(--muted);margin-top:2px}
+  .tnum{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--teal-800)}
+
+  /* ───────── LAB SEARCH ───────── */
+  .lab-search-grid{display:grid;grid-template-columns:280px 1fr;gap:18px}
+  .filters{padding:20px;display:flex;flex-direction:column;gap:18px}
+  .filters h4{font-family:'Fraunces',serif;font-size:14px;font-weight:600;color:var(--teal-900);text-transform:uppercase;letter-spacing:.06em}
+  .filter-group{display:flex;flex-direction:column;gap:8px}
+  .check-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink);cursor:pointer}
+  .check-row input{accent-color:var(--teal-800)}
+  .filter-pills{display:flex;flex-wrap:wrap;gap:6px}
+  .filter-pill{font-size:12px;padding:5px 10px;border-radius:999px;background:var(--cream-2);border:1px solid var(--line);cursor:pointer}
+  .filter-pill.active{background:var(--teal-900);color:var(--cream-2);border-color:var(--teal-900)}
+
+  .lab-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .lab-card{padding:20px;background:var(--white);border:1px solid var(--line);border-radius:var(--r-lg);transition:all .2s;cursor:pointer;position:relative}
+  .lab-card:hover{border-color:var(--teal-700);transform:translateY(-2px);box-shadow:var(--shadow)}
+  .lab-card.featured{border:1px solid var(--gold);background:linear-gradient(180deg,var(--cream-2),var(--white))}
+  .lab-card.featured::before{content:"⭐ Önerilen";position:absolute;top:-1px;right:14px;background:var(--gold);color:var(--teal-900);font-size:10px;padding:3px 10px;border-radius:0 0 8px 8px;font-weight:600;letter-spacing:.04em}
+  .lab-head{display:flex;gap:14px;align-items:center;margin-bottom:14px}
+  .lab-logo{width:52px;height:52px;border-radius:12px;background:var(--teal-50);color:var(--teal-900);display:grid;place-items:center;font-family:'Fraunces',serif;font-weight:600;font-size:20px;flex-shrink:0}
+  .lab-card.featured .lab-logo{background:var(--gold);color:var(--teal-900)}
+  .lab-info h4{font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--teal-900)}
+  .lab-info .loc{font-size:12px;color:var(--muted);margin-top:2px}
+  .lab-rating{display:flex;align-items:center;gap:4px;margin-bottom:12px;font-size:13px}
+  .lab-rating b{font-weight:600;color:var(--teal-900)}
+  .lab-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .tag{font-size:11px;padding:3px 8px;background:var(--cream-2);border-radius:6px;color:var(--teal-800);border:1px solid var(--line)}
+  .lab-foot{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px dashed var(--line)}
+  .lab-foot .price{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+  .lab-foot .price b{color:var(--teal-900);font-size:14px;font-family:'Fraunces',serif}
+
+  /* ───────── UPLOAD ───────── */
+  .upload-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}
+  .drop-zone{
+    border:2px dashed var(--teal-100);background:linear-gradient(180deg,var(--cream-2),var(--white));
+    border-radius:var(--r-lg);padding:40px;text-align:center;cursor:pointer;transition:all .2s;
+  }
+  .drop-zone:hover{border-color:var(--teal-700);background:var(--teal-50)}
+  .drop-zone .ico{width:64px;height:64px;border-radius:16px;background:var(--white);color:var(--teal-800);display:grid;place-items:center;margin:0 auto 18px;border:1px solid var(--line)}
+  .drop-zone h4{font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--teal-900);margin-bottom:6px}
+  .drop-zone p{color:var(--muted);font-size:13px}
+  .drop-zone .formats{margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--teal-800);background:var(--white);display:inline-block;padding:6px 12px;border-radius:6px;border:1px solid var(--line)}
+
+  .file-row{display:flex;align-items:center;gap:14px;padding:14px;background:var(--cream-2);border-radius:var(--r);margin-top:14px;border:1px solid var(--line)}
+  .file-row .file-ico{width:42px;height:42px;border-radius:10px;background:var(--teal-900);color:var(--gold);display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600}
+  .file-row .file-info{flex:1}
+  .file-row .file-info b{font-size:13px;display:block}
+  .file-row .file-info span{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+  .progress{height:6px;background:var(--line);border-radius:99px;margin-top:6px;overflow:hidden}
+  .progress > span{display:block;height:100%;width:75%;background:var(--success);border-radius:99px;transition:width .3s}
+
+  .order-form{padding:24px}
+  .order-form h3{font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:var(--teal-900);margin-bottom:18px}
+
+  /* ───────── JOB DETAIL ───────── */
+  .job-detail-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:18px}
+  .timeline{padding:24px;position:relative}
+  .timeline::before{content:"";position:absolute;left:39px;top:48px;bottom:48px;width:2px;background:var(--line)}
+  .tl-item{display:grid;grid-template-columns:32px 1fr;gap:14px;padding:10px 0;align-items:flex-start;position:relative;z-index:1}
+  .tl-dot{width:32px;height:32px;border-radius:50%;background:var(--white);border:2px solid var(--line);display:grid;place-items:center;font-size:14px}
+  .tl-item.done .tl-dot{background:var(--success);border-color:var(--success);color:white}
+  .tl-item.current .tl-dot{background:var(--gold);border-color:var(--gold);color:var(--teal-900);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(201,169,97,.5)}70%{box-shadow:0 0 0 12px rgba(201,169,97,0)}100%{box-shadow:0 0 0 0 rgba(201,169,97,0)}}
+  .tl-content h5{font-size:14px;font-weight:600;color:var(--teal-900)}
+  .tl-content .when{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:2px}
+  .tl-content .desc{font-size:13px;color:var(--ink);margin-top:6px;line-height:1.5}
+
+  .messages{padding:18px;display:flex;flex-direction:column;gap:10px;max-height:380px;overflow-y:auto}
+  .msg{padding:12px 14px;border-radius:var(--r);font-size:13px;max-width:85%}
+  .msg.them{background:var(--cream-2);border:1px solid var(--line);align-self:flex-start}
+  .msg.you{background:var(--teal-900);color:var(--cream-2);align-self:flex-end}
+  .msg .who{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;font-family:'JetBrains Mono',monospace;opacity:.7}
+
+  /* ───────── ADMIN ───────── */
+  .admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+  .chart-row{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-bottom:18px}
+  .chart{padding:20px;height:280px;display:flex;flex-direction:column}
+  .chart h3{font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--teal-900);margin-bottom:14px}
+  .bars{flex:1;display:flex;align-items:flex-end;gap:14px;padding-top:16px;border-bottom:1px solid var(--line);position:relative}
+  .bar{flex:1;background:linear-gradient(180deg,var(--teal-700),var(--teal-900));border-radius:6px 6px 0 0;position:relative;min-height:8px;transition:all .3s}
+  .bar:hover{background:linear-gradient(180deg,var(--gold),#B89651)}
+  .bar::after{content:attr(data-label);position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+  .bar::before{content:attr(data-value);position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--teal-900);font-weight:600;font-family:'JetBrains Mono',monospace}
+
+  .donut-wrap{display:flex;align-items:center;gap:20px;padding-top:14px}
+  .donut{width:120px;height:120px;border-radius:50%;background:conic-gradient(var(--teal-900) 0% 45%,var(--gold) 45% 73%,var(--success) 73% 90%,var(--line) 90% 100%);position:relative;display:grid;place-items:center;flex-shrink:0}
+  .donut::after{content:"";position:absolute;width:80px;height:80px;background:var(--white);border-radius:50%}
+  .donut .num{position:relative;z-index:1;font-family:'Fraunces',serif;font-size:24px;font-weight:600;color:var(--teal-900)}
+  .legend{flex:1;display:flex;flex-direction:column;gap:8px;font-size:12px}
+  .legend > div{display:flex;align-items:center;gap:8px}
+  .legend .sw{width:10px;height:10px;border-radius:3px}
+
+  /* responsive */
+  @media (max-width:1100px){
+    .landing-hero,.auth-wrap,.dash,.lab-search-grid,.upload-grid,.job-detail-grid,.chart-row,.stats-row,.features,.lab-grid,.admin-stats{grid-template-columns:1fr !important}
+    .landing-hero{padding:32px}
+    .features{padding:0 32px 32px}
+  }
+</style>
+</head>
+<body>
+
+<div class="demo-bar">
+  <div class="brand">
+    <span class="dot"></span>
+    DentLink <small>DEMO • PROTOTİP</small>
+  </div>
+  <div class="screen-tabs">
+    <button data-screen="landing" class="active">Anasayfa</button>
+    <button data-screen="auth">Giriş / Kayıt</button>
+    <button data-screen="doctor">Hekim Paneli</button>
+    <button data-screen="search">Lab Bulma</button>
+    <button data-screen="upload">STL Yükle</button>
+    <button data-screen="lab">Lab Paneli</button>
+    <button data-screen="job">İş Detayı</button>
+    <button data-screen="admin">Admin</button>
+  </div>
+</div>
+
+<div class="app">
+
+  <!-- ═══════════════ LANDING ═══════════════ -->
+  <div class="screen active" id="landing">
+    <div class="landing">
+      <div class="landing-hero">
+        <div>
+          <span class="eyebrow">● Türkiye'nin ilk dental iş platformu</span>
+          <h1>Hekim ile laboratuvarı <em>tek bir tık</em> ile buluşturan dijital köprü.</h1>
+          <p>STL dosyalarınızı güvenle yükleyin, doğru laboratuvarı bulun, üretim sürecini canlı takip edin. Telefon trafiğine, kargo karmaşasına, kayıp dosyalara son.</p>
+          <div class="landing-cta">
+            <button class="btn btn-primary" onclick="goto('auth')">Ücretsiz başla →</button>
+            <button class="btn btn-ghost">Demo izle</button>
+          </div>
+          <div class="landing-stats">
+            <div><span>240+</span><span>Aktif laboratuvar</span></div>
+            <div><span>1.8K</span><span>Hekim üyemiz</span></div>
+            <div><span>%99.4</span><span>Dosya bütünlüğü</span></div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <h3>━ Canlı Sipariş Akışı</h3>
+          <div class="hero-job">
+            <div>
+              <div class="name">Zirkonyum Köprü • 14-17</div>
+              <div class="meta">DR-2841 → BURSA DENTAL LAB</div>
+            </div>
+            <span class="pill uretimde"><span class="dot"></span>Üretimde</span>
+          </div>
+          <div class="hero-job">
+            <div>
+              <div class="name">Implant Crown • 36</div>
+              <div class="meta">DR-2841 → ANATOLIA CAD/CAM</div>
+            </div>
+            <span class="pill tamamlandi"><span class="dot"></span>Tamamlandı</span>
+          </div>
+          <div class="hero-job">
+            <div>
+              <div class="name">Tam Protez Üst</div>
+              <div class="meta">DR-2841 → MERIDIAN LAB</div>
+            </div>
+            <span class="pill bekliyor"><span class="dot"></span>Bekliyor</span>
+          </div>
+        </div>
+      </div>
+      <div class="features">
+        <div class="feature">
+          <div class="icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <h4>Güvenli STL Aktarımı</h4>
+          <p>End-to-end şifreleme ile dosyalarınız sadece seçtiğiniz laboratuvara ulaşır. KVKK uyumlu altyapı.</p>
+        </div>
+        <div class="feature">
+          <div class="icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <h4>Doğru Laboratuvar</h4>
+          <p>Uzmanlık alanı, fiyat, bölge ve değerlendirmelere göre filtreleyin. İhtiyacınıza en uygun seçimi yapın.</p>
+        </div>
+        <div class="feature">
+          <div class="icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <h4>Canlı İş Takibi</h4>
+          <p>Bekliyor → Üretimde → Tamamlandı. Tüm aşamalardan anlık bildirim, ETA tahmini ve mesajlaşma.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ AUTH ═══════════════ -->
+  <div class="screen" id="auth">
+    <div class="auth-wrap card">
+      <div class="auth-art">
+        <div>
+          <div class="brand" style="color:var(--gold-soft);font-family:'Fraunces',serif;font-weight:600;font-size:20px;display:flex;align-items:center;gap:10px">
+            <span style="width:10px;height:10px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px rgba(201,169,97,.18)"></span>
+            DentLink
+          </div>
+        </div>
+        <div>
+          <h2>Hekim ile lab,<br><em>aynı dilde</em><br>konuşmaya başladı.</h2>
+          <p class="quote">"Eski sistemde her gün ortalama 3 saat telefon ve WhatsApp trafiğine kaybediyorduk. DentLink ile sıfıra indirdik. Tek bir kayıp dosyamız olmadı."<br><br>— Op. Dr. Aylin Demir, İstanbul</p>
+        </div>
+        <div class="auth-grid-deco"></div>
+      </div>
+      <div class="auth-form">
+        <div class="auth-tabs">
+          <button class="active" onclick="switchAuth(this,'doctor')">Diş Hekimi</button>
+          <button onclick="switchAuth(this,'lab')">Laboratuvar</button>
+        </div>
+        <h3>Hesabınıza giriş yapın</h3>
+        <div class="sub">Henüz üye değil misiniz? <a href="#" style="color:var(--teal-800);font-weight:600">Ücretsiz kayıt olun</a></div>
+
+        <div class="form-row">
+          <label class="label">E-posta</label>
+          <input class="input" type="email" placeholder="ornek@klinik.com" value="dr.aylin@dentaclinic.com">
+        </div>
+        <div class="form-row">
+          <label class="label">Şifre</label>
+          <input class="input" type="password" placeholder="••••••••" value="••••••••••">
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <label class="check-row"><input type="checkbox" checked> <span>Beni hatırla</span></label>
+          <a href="#" style="font-size:12px;color:var(--teal-800)">Şifremi unuttum</a>
+        </div>
+        <button class="btn btn-primary" onclick="goto('doctor')">Giriş Yap →</button>
+
+        <div style="display:flex;align-items:center;gap:14px;margin:24px 0">
+          <div style="flex:1;height:1px;background:var(--line)"></div>
+          <span style="color:var(--muted);font-size:12px">veya</span>
+          <div style="flex:1;height:1px;background:var(--line)"></div>
+        </div>
+
+        <button class="btn btn-ghost" style="width:100%;justify-content:center">SMS ile giriş yap</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ DOCTOR DASHBOARD ═══════════════ -->
+  <div class="screen" id="doctor">
+    <div class="dash">
+      <aside class="sidebar">
+        <div class="side-brand">
+          <div class="logo">D</div>
+          <div>
+            <div class="name">DentLink</div>
+            <div class="role">Hekim Paneli</div>
+          </div>
+        </div>
+        <div class="nav">
+          <a class="active"><span class="ico">▸</span> Ana Panel</a>
+          <a><span class="ico">▸</span> Yeni Sipariş</a>
+          <a onclick="goto('search')"><span class="ico">▸</span> Laboratuvar Bul</a>
+          <a><span class="ico">▸</span> Siparişlerim</a>
+          <a><span class="ico">▸</span> Mesajlar <span style="margin-left:auto;background:var(--gold);color:var(--teal-900);font-size:10px;padding:1px 6px;border-radius:99px;font-weight:600">3</span></a>
+          <div class="nav-section">— Hesap —</div>
+          <a><span class="ico">▸</span> Profilim</a>
+          <a><span class="ico">▸</span> Faturalama</a>
+          <a><span class="ico">▸</span> Ayarlar</a>
+        </div>
+        <div class="side-foot">
+          <div class="avatar">AD</div>
+          <div>
+            <div class="nm">Dr. Aylin D.</div>
+            <div class="em">Bursa</div>
+          </div>
+        </div>
+      </aside>
+
+      <div class="main">
+        <div class="topbar">
+          <div>
+            <div class="crumb">Ana Panel / <b>Genel Bakış</b></div>
+            <h2>Hoşgeldin, Dr. Aylin 🦷</h2>
+          </div>
+          <div class="topbar-actions">
+            <button class="btn btn-ghost btn-sm">🔔 Bildirimler</button>
+            <button class="btn btn-gold btn-sm" onclick="goto('upload')">+ Yeni Sipariş</button>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat">
+            <div class="lab">Aktif Sipariş</div>
+            <div class="val">7</div>
+            <div class="delta">↑ 2 bu hafta</div>
+          </div>
+          <div class="stat">
+            <div class="lab">Üretimde</div>
+            <div class="val">4</div>
+            <div class="delta">~3 gün ortalama</div>
+          </div>
+          <div class="stat">
+            <div class="lab">Bu Ay Tamamlanan</div>
+            <div class="val">23</div>
+            <div class="delta">↑ %18</div>
+          </div>
+          <div class="stat accent">
+            <div class="lab">Bu Ay Toplam</div>
+            <div class="val">₺18.4K</div>
+            <div class="delta">↑ %12</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Son Siparişler</h3>
+            <button class="btn btn-ghost btn-sm">Tümünü gör →</button>
+          </div>
+          <table>
+            <thead>
+              <tr><th>Sipariş</th><th>Laboratuvar</th><th>İçerik</th><th>Durum</th><th>Teslim</th><th></th></tr>
+            </thead>
+            <tbody>
+              <tr onclick="goto('job')" style="cursor:pointer">
+                <td><div class="name">#DL-2841</div><div class="sub">2 saat önce</div></td>
+                <td><div class="name">Bursa Dental Lab</div><div class="sub">Bursa, Osmangazi</div></td>
+                <td>Zirkonyum Köprü • 14-17 <div class="sub">crown_set_a.stl</div></td>
+                <td><span class="pill uretimde"><span class="dot"></span>Üretimde</span></td>
+                <td class="tnum">29 Nisan</td>
+                <td>→</td>
+              </tr>
+              <tr>
+                <td><div class="name">#DL-2839</div><div class="sub">Dün</div></td>
+                <td><div class="name">Anatolia CAD/CAM</div><div class="sub">İzmir, Bornova</div></td>
+                <td>Implant Crown • 36 <div class="sub">implant_36.stl</div></td>
+                <td><span class="pill bekliyor"><span class="dot"></span>Bekliyor</span></td>
+                <td class="tnum">02 Mayıs</td>
+                <td>→</td>
+              </tr>
+              <tr>
+                <td><div class="name">#DL-2832</div><div class="sub">3 gün önce</div></td>
+                <td><div class="name">Meridian Lab</div><div class="sub">Ankara, Çankaya</div></td>
+                <td>Tam Protez (Üst Çene) <div class="sub">full_upper.stl</div></td>
+                <td><span class="pill tamamlandi"><span class="dot"></span>Tamamlandı</span></td>
+                <td class="tnum">26 Nisan</td>
+                <td>→</td>
+              </tr>
+              <tr>
+                <td><div class="name">#DL-2828</div><div class="sub">5 gün önce</div></td>
+                <td><div class="name">Bursa Dental Lab</div><div class="sub">Bursa, Osmangazi</div></td>
+                <td>Inlay/Onlay • 27 <div class="sub">inlay_27_v2.stl</div></td>
+                <td><span class="pill tamamlandi"><span class="dot"></span>Tamamlandı</span></td>
+                <td class="tnum">24 Nisan</td>
+                <td>→</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ LAB SEARCH ═══════════════ -->
+  <div class="screen" id="search">
+    <div class="dash">
+      <aside class="sidebar">
+        <div class="side-brand">
+          <div class="logo">D</div>
+          <div><div class="name">DentLink</div><div class="role">Hekim Paneli</div></div>
+        </div>
+        <div class="nav">
+          <a onclick="goto('doctor')"><span class="ico">▸</span> Ana Panel</a>
+          <a><span class="ico">▸</span> Yeni Sipariş</a>
+          <a class="active"><span class="ico">▸</span> Laboratuvar Bul</a>
+          <a><span class="ico">▸</span> Siparişlerim</a>
+          <a><span class="ico">▸</span> Mesajlar</a>
+        </div>
+        <div class="side-foot"><div class="avatar">AD</div><div><div class="nm">Dr. Aylin D.</div><div class="em">Bursa</div></div></div>
+      </aside>
+
+      <div class="main">
+        <div class="topbar">
+          <div>
+            <div class="crumb">Hekim / <b>Laboratuvar Bul</b></div>
+            <h2>Doğru laboratuvarı keşfet</h2>
+          </div>
+          <input class="input" style="max-width:340px" placeholder="🔍 İsim, şehir veya uzmanlık ara..." value="Zirkonyum">
+        </div>
+
+        <div class="lab-search-grid">
+          <aside class="card filters">
+            <div class="filter-group">
+              <h4>Bölge</h4>
+              <div class="filter-pills">
+                <span class="filter-pill active">Tümü</span>
+                <span class="filter-pill">Bursa</span>
+                <span class="filter-pill">İstanbul</span>
+                <span class="filter-pill">Ankara</span>
+                <span class="filter-pill">İzmir</span>
+              </div>
+            </div>
+            <div class="filter-group">
+              <h4>Uzmanlık</h4>
+              <label class="check-row"><input type="checkbox" checked> Zirkonyum</label>
+              <label class="check-row"><input type="checkbox" checked> Implant Üstü</label>
+              <label class="check-row"><input type="checkbox"> CAD/CAM</label>
+              <label class="check-row"><input type="checkbox"> Total Protez</label>
+              <label class="check-row"><input type="checkbox"> Ortodonti</label>
+              <label class="check-row"><input type="checkbox"> İskelet Döküm</label>
+            </div>
+            <div class="filter-group">
+              <h4>Teslim Süresi</h4>
+              <label class="check-row"><input type="radio" name="t"> 1-2 gün</label>
+              <label class="check-row"><input type="radio" name="t" checked> 3-5 gün</label>
+              <label class="check-row"><input type="radio" name="t"> 1 hafta+</label>
+            </div>
+            <div class="filter-group">
+              <h4>Değerlendirme</h4>
+              <label class="check-row"><input type="checkbox" checked> ⭐ 4.5+ puan</label>
+              <label class="check-row"><input type="checkbox"> Doğrulanmış</label>
+            </div>
+            <button class="btn btn-ghost btn-sm">Filtreleri sıfırla</button>
+          </aside>
+
+          <div class="lab-grid">
+            <div class="lab-card featured" onclick="goto('upload')">
+              <div class="lab-head">
+                <div class="lab-logo">B</div>
+                <div class="lab-info"><h4>Bursa Dental Lab</h4><div class="loc">📍 Bursa, Osmangazi • 8 km</div></div>
+              </div>
+              <div class="lab-rating">⭐⭐⭐⭐⭐ <b>4.9</b> <span style="color:var(--muted)">(187 değerlendirme)</span></div>
+              <div class="lab-tags"><span class="tag">Zirkonyum</span><span class="tag">CAD/CAM</span><span class="tag">Implant</span></div>
+              <div class="lab-foot">
+                <div class="price">Ortalama crown<br><b>₺850</b></div>
+                <button class="btn btn-primary btn-sm">Sipariş ver →</button>
+              </div>
+            </div>
+
+            <div class="lab-card">
+              <div class="lab-head">
+                <div class="lab-logo">A</div>
+                <div class="lab-info"><h4>Anatolia CAD/CAM</h4><div class="loc">📍 İzmir, Bornova</div></div>
+              </div>
+              <div class="lab-rating">⭐⭐⭐⭐⭐ <b>4.8</b> <span style="color:var(--muted)">(241 değ.)</span></div>
+              <div class="lab-tags"><span class="tag">Zirkonyum</span><span class="tag">E.max</span><span class="tag">Implant</span></div>
+              <div class="lab-foot">
+                <div class="price">Ortalama crown<br><b>₺780</b></div>
+                <button class="btn btn-primary btn-sm">Sipariş ver →</button>
+              </div>
+            </div>
+
+            <div class="lab-card">
+              <div class="lab-head">
+                <div class="lab-logo">M</div>
+                <div class="lab-info"><h4>Meridian Lab</h4><div class="loc">📍 Ankara, Çankaya</div></div>
+              </div>
+              <div class="lab-rating">⭐⭐⭐⭐ <b>4.6</b> <span style="color:var(--muted)">(94 değ.)</span></div>
+              <div class="lab-tags"><span class="tag">Total Protez</span><span class="tag">İskelet</span></div>
+              <div class="lab-foot">
+                <div class="price">Tam protez<br><b>₺2.400</b></div>
+                <button class="btn btn-primary btn-sm">Sipariş ver →</button>
+              </div>
+            </div>
+
+            <div class="lab-card">
+              <div class="lab-head">
+                <div class="lab-logo">D</div>
+                <div class="lab-info"><h4>Dentaflex Studio</h4><div class="loc">📍 İstanbul, Ataşehir</div></div>
+              </div>
+              <div class="lab-rating">⭐⭐⭐⭐⭐ <b>4.7</b> <span style="color:var(--muted)">(312 değ.)</span></div>
+              <div class="lab-tags"><span class="tag">Zirkonyum</span><span class="tag">Estetik</span><span class="tag">Veneer</span></div>
+              <div class="lab-foot">
+                <div class="price">Veneer (1 ünite)<br><b>₺1.150</b></div>
+                <button class="btn btn-primary btn-sm">Sipariş ver →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ UPLOAD ═══════════════ -->
+  <div class="screen" id="upload">
+    <div class="dash">
+      <aside class="sidebar">
+        <div class="side-brand"><div class="logo">D</div><div><div class="name">DentLink</div><div class="role">Hekim Paneli</div></div></div>
+        <div class="nav">
+          <a onclick="goto('doctor')"><span class="ico">▸</span> Ana Panel</a>
+          <a class="active"><span class="ico">▸</span> Yeni Sipariş</a>
+          <a onclick="goto('search')"><span class="ico">▸</span> Laboratuvar Bul</a>
+          <a><span class="ico">▸</span> Siparişlerim</a>
+        </div>
+        <div class="side-foot"><div class="avatar">AD</div><div><div class="nm">Dr. Aylin D.</div><div class="em">Bursa</div></div></div>
+      </aside>
+
+      <div class="main">
+        <div class="topbar">
+          <div>
+            <div class="crumb">Hekim / <b>Yeni Sipariş Oluştur</b></div>
+            <h2>STL dosyanı yükle ve gönder</h2>
+          </div>
+          <button class="btn btn-ghost btn-sm">⨯ İptal</button>
+        </div>
+
+        <div class="upload-grid">
+          <div>
+            <div class="drop-zone">
+              <div class="ico">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              </div>
+              <h4>STL dosyalarını buraya bırak</h4>
+              <p>veya tıklayarak seç • maksimum dosya boyutu 200 MB</p>
+              <div class="formats">.STL  •  .PLY  •  .OBJ</div>
+            </div>
+
+            <div class="file-row">
+              <div class="file-ico">.STL</div>
+              <div class="file-info">
+                <b>crown_set_14_17.stl</b>
+                <span>48.2 MB • Yükleniyor... 75%</span>
+                <div class="progress"><span></span></div>
+              </div>
+              <button class="btn btn-ghost btn-sm">⨯</button>
+            </div>
+            <div class="file-row">
+              <div class="file-ico">.STL</div>
+              <div class="file-info">
+                <b>scan_reference.stl</b>
+                <span>22.1 MB • ✓ Yüklendi</span>
+              </div>
+              <button class="btn btn-ghost btn-sm">⨯</button>
+            </div>
+          </div>
+
+          <div class="card order-form">
+            <h3>Sipariş Bilgileri</h3>
+
+            <div class="form-row">
+              <label class="label">Seçilen Laboratuvar</label>
+              <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--cream-2);border-radius:var(--r);border:1px solid var(--gold)">
+                <div class="lab-logo" style="width:40px;height:40px;font-size:16px;background:var(--gold);color:var(--teal-900)">B</div>
+                <div style="flex:1">
+                  <b style="font-size:13px">Bursa Dental Lab</b>
+                  <div style="font-size:11px;color:var(--muted)">⭐ 4.9 • Bursa</div>
+                </div>
+                <button class="btn btn-ghost btn-sm" onclick="goto('search')">Değiştir</button>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <label class="label">İş Türü</label>
+              <select class="select">
+                <option>Zirkonyum Köprü</option><option>Implant Crown</option><option>Veneer</option><option>Total Protez</option><option>Inlay/Onlay</option>
+              </select>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-row">
+                <label class="label">Hasta Kodu</label>
+                <input class="input" value="HSTA-2841">
+              </div>
+              <div class="form-row">
+                <label class="label">Diş Numarası</label>
+                <input class="input" value="14, 15, 16, 17">
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-row">
+                <label class="label">Renk Kodu</label>
+                <input class="input" value="A2">
+              </div>
+              <div class="form-row">
+                <label class="label">Beklenen Teslim</label>
+                <input class="input" type="date" value="2026-04-29">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <label class="label">Notlar</label>
+              <textarea class="input" rows="3" placeholder="Özel istekler, materyal tercihi...">Hasta opak A2 renk istiyor. Yüksek estetik bölge, marjin hatları net olmalı.</textarea>
+            </div>
+
+            <button class="btn btn-gold" style="width:100%;justify-content:center;padding:14px">Siparişi Gönder ✓</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ LAB DASHBOARD ═══════════════ -->
+  <div class="screen" id="lab">
+    <div class="dash">
+      <aside class="sidebar">
+        <div class="side-brand">
+          <div class="logo" style="background:var(--gold);color:var(--teal-900)">L</div>
+          <div><div class="name">DentLink</div><div class="role">Lab Paneli</div></div>
+        </div>
+        <div class="nav">
+          <a class="active"><span class="ico">▸</span> Gelen İşler <span style="margin-left:auto;background:var(--danger);color:white;font-size:10px;padding:1px 6px;border-radius:99px;font-weight:600">5</span></a>
+          <a><span class="ico">▸</span> Üretimde</a>
+          <a><span class="ico">▸</span> Tamamlananlar</a>
+          <a><span class="ico">▸</span> Hekim Listesi</a>
+          <a><span class="ico">▸</span> Mesajlar</a>
+          <div class="nav-section">— Lab Yönetimi —</div>
+          <a><span class="ico">▸</span> Profil & Vitrin</a>
+          <a><span class="ico">▸</span> Fiyat Listesi</a>
+          <a><span class="ico">▸</span> Raporlar</a>
+        </div>
+        <div class="side-foot">
+          <div class="avatar" style="background:var(--teal-900);color:var(--gold)">BD</div>
+          <div><div class="nm">Bursa Dental Lab</div><div class="em">Doğrulanmış ✓</div></div>
+        </div>
+      </aside>
+
+      <div class="main">
+        <div class="topbar">
+          <div>
+            <div class="crumb">Laboratuvar / <b>Gelen İşler</b></div>
+            <h2>Yeni siparişler bekliyor</h2>
+          </div>
+          <div class="topbar-actions">
+            <button class="btn btn-ghost btn-sm">Filtre</button>
+            <button class="btn btn-ghost btn-sm">↓ CSV</button>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat"><div class="lab">Bekleyen</div><div class="val">5</div><div class="delta" style="color:var(--warning)">İlk yanıt < 2 saat</div></div>
+          <div class="stat"><div class="lab">Üretimde</div><div class="val">12</div><div class="delta">3 acil</div></div>
+          <div class="stat"><div class="lab">Bu Hafta Tesl.</div><div class="val">28</div><div class="delta">↑ %22</div></div>
+          <div class="stat accent"><div class="lab">Aylık Ciro</div><div class="val">₺142K</div><div class="delta">↑ %15</div></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Gelen Siparişler (5)</h3>
+            <div style="display:flex;gap:8px"><span class="filter-pill active">Tümü</span><span class="filter-pill">Acil</span><span class="filter-pill">Bugün</span></div>
+          </div>
+          <table>
+            <thead><tr><th>Sipariş</th><th>Hekim</th><th>İçerik</th><th>STL</th><th>Durum</th><th>Aksiyon</th></tr></thead>
+            <tbody>
+              <tr onclick="goto('job')" style="cursor:pointer;background:var(--cream-2)">
+                <td><div class="name">#DL-2841</div><div class="sub">2 saat önce • <b style="color:var(--danger)">YENİ</b></div></td>
+                <td><div class="name">Dr. Aylin Demir</div><div class="sub">Bursa Dent Klinik</div></td>
+                <td>Zirkonyum Köprü • 14-17</td>
+                <td><span class="tnum">2 dosya • 70 MB</span></td>
+                <td><span class="pill bekliyor"><span class="dot"></span>Bekliyor</span></td>
+                <td><button class="btn btn-gold btn-sm">Kabul et →</button></td>
+              </tr>
+              <tr>
+                <td><div class="name">#DL-2840</div><div class="sub">3 saat önce</div></td>
+                <td><div class="name">Dr. Mehmet Kaya</div><div class="sub">Smile Klinik</div></td>
+                <td>Veneer • 11-21-22</td>
+                <td><span class="tnum">3 dosya • 92 MB</span></td>
+                <td><span class="pill bekliyor"><span class="dot"></span>Bekliyor</span></td>
+                <td><button class="btn btn-gold btn-sm">Kabul et →</button></td>
+              </tr>
+              <tr>
+                <td><div class="name">#DL-2837</div><div class="sub">5 saat önce</div></td>
+                <td><div class="name">Dr. Sevgi Toprak</div><div class="sub">Lara Dental</div></td>
+                <td>Implant Crown • 36</td>
+                <td><span class="tnum">1 dosya • 32 MB</span></td>
+                <td><span class="pill bekliyor"><span class="dot"></span>Bekliyor</span></td>
+                <td><button class="btn btn-gold btn-sm">Kabul et →</button></td>
+              </tr>
+              <tr>
+                <td><div class="name">#DL-2836</div><div class="sub">Dün</div></td>
+                <td><div class="name">Dr. Ali Veli</div><div class="sub">Yıldız Polikl.</div></td>
+                <td>Inlay/Onlay • 27</td>
+                <td><span class="tnum">1 dosya • 24 MB</span></td>
+                <td><span class="pill bekliyor"><span class="dot"></span>Bekliyor</span></td>
+                <td><button class="btn btn-gold btn-sm">Kabul et →</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ JOB DETAIL ═══════════════ -->
+  <div class="screen" id="job">
+    <div class="dash">
+      <aside class="sidebar">
+        <div class="side-brand"><div class="logo" style="background:var(--gold);color:var(--teal-900)">L</div><div><div class="name">DentLink</div><div class="role">Lab Paneli</div></div></div>
+        <div class="nav">
+          <a onclick="goto('lab')"><span class="ico">▸</span> Gelen İşler</a>
+          <a class="active"><span class="ico">▸</span> Üretimde</a>
+          <a><span class="ico">▸</span> Tamamlananlar</a>
+          <a><span class="ico">▸</span> Hekim Listesi</a>
+          <a><span class="ico">▸</span> Mesajlar</a>
+        </div>
+        <div class="side-foot"><div class="avatar" style="background:var(--teal-900);color:var(--gold)">BD</div><div><div class="nm">Bursa Dental Lab</div><div class="em">Doğrulanmış ✓</div></div></div>
+      </aside>
+
+      <div class="main">
+        <div class="topbar">
+          <div>
+            <div class="crumb">Sipariş / <b>#DL-2841</b></div>
+            <h2>Zirkonyum Köprü • 14-17</h2>
+          </div>
+          <div class="topbar-actions">
+            <span class="pill uretimde" style="font-size:13px;padding:6px 14px"><span class="dot"></span>Üretimde</span>
+            <button class="btn btn-primary btn-sm">Durumu güncelle ↻</button>
+          </div>
+        </div>
+
+        <div class="stats-row" style="grid-template-columns:repeat(3,1fr)">
+          <div class="stat"><div class="lab">Hekim</div><div style="font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--teal-900);margin-top:4px">Dr. Aylin Demir</div><div class="delta" style="color:var(--muted)">📍 Bursa</div></div>
+          <div class="stat"><div class="lab">Hasta Kodu</div><div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:600;color:var(--teal-900);margin-top:4px">HSTA-2841</div><div class="delta" style="color:var(--muted)">Renk: A2</div></div>
+          <div class="stat"><div class="lab">Teslim Tarihi</div><div style="font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--teal-900);margin-top:4px">29 Nisan</div><div class="delta">2 gün kaldı</div></div>
+        </div>
+
+        <div class="job-detail-grid">
+          <div class="card timeline">
+            <h3 style="font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--teal-900);margin-bottom:18px">İş Akışı</h3>
+
+            <div class="tl-item done">
+              <div class="tl-dot">✓</div>
+              <div class="tl-content">
+                <h5>Sipariş Oluşturuldu</h5>
+                <div class="when">27 Nisan • 09:42</div>
+                <div class="desc">Dr. Aylin Demir tarafından sipariş gönderildi. 2 STL dosyası yüklendi (70 MB).</div>
+              </div>
+            </div>
+
+            <div class="tl-item done">
+              <div class="tl-dot">✓</div>
+              <div class="tl-content">
+                <h5>Laboratuvar Kabul Etti</h5>
+                <div class="when">27 Nisan • 10:18</div>
+                <div class="desc">Sipariş onaylandı. Tahmini teslim: 29 Nisan. Materyal: Zirkonyum Multilayer.</div>
+              </div>
+            </div>
+
+            <div class="tl-item current">
+              <div class="tl-dot">⚙</div>
+              <div class="tl-content">
+                <h5>Üretim Aşamasında</h5>
+                <div class="when">27 Nisan • 14:05 • <span style="color:var(--gold)">Şu an</span></div>
+                <div class="desc">CAD tasarımı tamamlandı. Frezeleme aşamasında. Yaklaşık tamamlanma: 28 Nisan akşamı.</div>
+              </div>
+            </div>
+
+            <div class="tl-item">
+              <div class="tl-dot" style="color:var(--muted)">3</div>
+              <div class="tl-content"><h5 style="color:var(--muted)">Kalite Kontrol</h5><div class="when">— Bekleniyor —</div></div>
+            </div>
+
+            <div class="tl-item">
+              <div class="tl-dot" style="color:var(--muted)">4</div>
+              <div class="tl-content"><h5 style="color:var(--muted)">Teslimat / Kargo</h5><div class="when">— Bekleniyor —</div></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="panel-head"><h3>Mesajlaşma</h3></div>
+            <div class="messages">
+              <div class="msg them">
+                <div class="who">DR. AYLİN • 27 Nisan</div>
+                Merhaba, sipariş gönderdim. Marjin hatları konusunda dikkatli olmanızı rica ederim, hasta ön bölge.
+              </div>
+              <div class="msg you">
+                <div class="who">SİZ • 27 Nisan</div>
+                Aldık, hocam ✓ STL'leri inceledik. Kalitesi iyi. Yarın akşam tasarım önizlemesi göndereceğiz.
+              </div>
+              <div class="msg them">
+                <div class="who">DR. AYLİN • Bugün</div>
+                Teşekkürler! Renk A2 olduğunu unutmayın lütfen.
+              </div>
+              <div class="msg you">
+                <div class="who">SİZ • Bugün</div>
+                Not edildi 👍 Multilayer A2 materyali hazırlandı. Üretime başladık.
+              </div>
+            </div>
+            <div style="padding:14px;border-top:1px solid var(--line);display:flex;gap:8px">
+              <input class="input" placeholder="Mesaj yaz..." style="flex:1">
+              <button class="btn btn-primary btn-sm">Gönder ↵</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ ADMIN ═══════════════ -->
+  <div class="screen" id="admin">
+    <div class="dash">
+      <aside class="sidebar">
+        <div class="side-brand">
+          <div class="logo" style="background:var(--ink);color:var(--gold)">A</div>
+          <div><div class="name">DentLink</div><div class="role">Admin Konsol</div></div>
+        </div>
+        <div class="nav">
+          <a class="active"><span class="ico">▸</span> Genel Bakış</a>
+          <a><span class="ico">▸</span> Hekimler</a>
+          <a><span class="ico">▸</span> Laboratuvarlar</a>
+          <a><span class="ico">▸</span> Onay Bekleyenler <span style="margin-left:auto;background:var(--warning);color:white;font-size:10px;padding:1px 6px;border-radius:99px;font-weight:600">7</span></a>
+          <a><span class="ico">▸</span> Tüm Siparişler</a>
+          <a><span class="ico">▸</span> Şikayetler</a>
+          <div class="nav-section">— Sistem —</div>
+          <a><span class="ico">▸</span> Komisyon</a>
+          <a><span class="ico">▸</span> Loglar</a>
+          <a><span class="ico">▸</span> Ayarlar</a>
+        </div>
+        <div class="side-foot"><div class="avatar" style="background:var(--ink);color:var(--gold)">SA</div><div><div class="nm">Süper Admin</div><div class="em">root</div></div></div>
+      </aside>
+
+      <div class="main">
+        <div class="topbar">
+          <div>
+            <div class="crumb">Admin / <b>Genel Bakış</b></div>
+            <h2>Sistem Sağlık Durumu</h2>
+          </div>
+          <div class="topbar-actions">
+            <span class="pill tamamlandi"><span class="dot"></span>Tüm sistemler operasyonel</span>
+          </div>
+        </div>
+
+        <div class="admin-stats">
+          <div class="stat"><div class="lab">Toplam Hekim</div><div class="val">1,847</div><div class="delta">↑ 23 bu hafta</div></div>
+          <div class="stat"><div class="lab">Aktif Lab</div><div class="val">241</div><div class="delta">↑ 4 bu hafta</div></div>
+          <div class="stat accent"><div class="lab">Aylık Sipariş</div><div class="val">3,412</div><div class="delta">↑ %18</div></div>
+          <div class="stat"><div class="lab">GMV (Aylık)</div><div class="val">₺2.84M</div><div class="delta">↑ %22</div></div>
+        </div>
+
+        <div class="chart-row">
+          <div class="card chart">
+            <h3>Sipariş Hacmi (Son 7 Gün)</h3>
+            <div class="bars">
+              <div class="bar" style="height:55%" data-label="Pzt" data-value="124"></div>
+              <div class="bar" style="height:72%" data-label="Sal" data-value="158"></div>
+              <div class="bar" style="height:48%" data-label="Çar" data-value="106"></div>
+              <div class="bar" style="height:88%" data-label="Per" data-value="194"></div>
+              <div class="bar" style="height:95%" data-label="Cum" data-value="212"></div>
+              <div class="bar" style="height:38%" data-label="Cmt" data-value="84"></div>
+              <div class="bar" style="height:25%" data-label="Paz" data-value="56"></div>
+            </div>
+          </div>
+          <div class="card chart">
+            <h3>İş Türü Dağılımı</h3>
+            <div class="donut-wrap">
+              <div class="donut"><span class="num">3.4K</span></div>
+              <div class="legend">
+                <div><span class="sw" style="background:var(--teal-900)"></span> Crown / Köprü <b style="margin-left:auto">45%</b></div>
+                <div><span class="sw" style="background:var(--gold)"></span> Implant <b style="margin-left:auto">28%</b></div>
+                <div><span class="sw" style="background:var(--success)"></span> Veneer <b style="margin-left:auto">17%</b></div>
+                <div><span class="sw" style="background:var(--line)"></span> Diğer <b style="margin-left:auto">10%</b></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Onay Bekleyen Laboratuvarlar (7)</h3>
+            <button class="btn btn-ghost btn-sm">Tümünü gör</button>
+          </div>
+          <table>
+            <thead><tr><th>Laboratuvar</th><th>Şehir</th><th>Belgeler</th><th>Başvuru</th><th>Aksiyon</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><div class="name">Vega CAD/CAM</div><div class="sub">vega@dental.com</div></td>
+                <td>Antalya</td>
+                <td><span class="pill tamamlandi"><span class="dot"></span>3/3 Yüklü</span></td>
+                <td class="tnum">26 Nisan</td>
+                <td><button class="btn btn-gold btn-sm">Onayla</button> <button class="btn btn-ghost btn-sm">Reddet</button></td>
+              </tr>
+              <tr>
+                <td><div class="name">Helix Dental Studio</div><div class="sub">info@helixdental.com</div></td>
+                <td>İstanbul</td>
+                <td><span class="pill bekliyor"><span class="dot"></span>2/3 Yüklü</span></td>
+                <td class="tnum">25 Nisan</td>
+                <td><button class="btn btn-gold btn-sm">Onayla</button> <button class="btn btn-ghost btn-sm">Reddet</button></td>
+              </tr>
+              <tr>
+                <td><div class="name">Pearl White Lab</div><div class="sub">pearl@lab.com</div></td>
+                <td>İzmir</td>
+                <td><span class="pill tamamlandi"><span class="dot"></span>3/3 Yüklü</span></td>
+                <td class="tnum">25 Nisan</td>
+                <td><button class="btn btn-gold btn-sm">Onayla</button> <button class="btn btn-ghost btn-sm">Reddet</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.screen-tabs button');
+  const screens = document.querySelectorAll('.screen');
+  function goto(id){
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.screen===id));
+    screens.forEach(s => s.classList.toggle('active', s.id===id));
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+  tabs.forEach(t => t.addEventListener('click', () => goto(t.dataset.screen)));
+  function switchAuth(btn, role){
+    btn.parentNode.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+</script>
+
+</body>
+</html>

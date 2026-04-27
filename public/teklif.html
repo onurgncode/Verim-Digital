@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DentLink — Proje Teklifi & Yol Haritası</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal-900:#0D3B3A;--teal-800:#114B49;--teal-700:#1A6360;
+    --teal-100:#D6E5E3;--teal-50:#EDF4F3;
+    --gold:#C9A961;--gold-soft:#E8D5A4;
+    --cream:#F5EFE5;--cream-2:#FAF5EB;
+    --white:#FFFFFF;--ink:#0F1F1E;--muted:#6B7B7A;--line:#E2D9C8;
+    --success:#3F8F5C;--warning:#D69243;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  .doc{max-width:880px;margin:0 auto;padding:60px 40px}
+
+  /* Cover */
+  .cover{
+    background:var(--teal-900);color:var(--cream-2);
+    padding:64px 56px;border-radius:24px;margin-bottom:40px;
+    background-image:
+      radial-gradient(700px 350px at 110% -10%,rgba(201,169,97,.22),transparent 60%),
+      radial-gradient(500px 300px at -10% 110%,rgba(255,255,255,.04),transparent 60%);
+    position:relative;overflow:hidden;
+  }
+  .cover::after{
+    content:"";position:absolute;right:-60px;bottom:-60px;width:240px;height:240px;
+    background:repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(201,169,97,.08) 10px,rgba(201,169,97,.08) 11px);
+    border-radius:50%;
+  }
+  .cover .logo{display:inline-flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-weight:600;font-size:20px;margin-bottom:40px}
+  .cover .logo .dot{width:10px;height:10px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px rgba(201,169,97,.18)}
+  .cover .logo small{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:400;color:var(--gold-soft);background:rgba(255,255,255,.08);padding:3px 8px;border-radius:4px;letter-spacing:.06em;text-transform:uppercase;margin-left:6px}
+  .cover h1{font-family:'Fraunces',serif;font-size:56px;line-height:1.05;font-weight:500;letter-spacing:-.02em;margin-bottom:18px}
+  .cover h1 em{color:var(--gold);font-style:italic;font-weight:400}
+  .cover .lead{font-size:17px;max-width:600px;color:rgba(245,239,229,.85);margin-bottom:36px;line-height:1.6}
+  .cover-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding-top:28px;border-top:1px dashed rgba(255,255,255,.18);position:relative;z-index:1}
+  .cover-meta div{font-size:12px;color:var(--gold-soft);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.06em}
+  .cover-meta div b{display:block;font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--cream-2);text-transform:none;letter-spacing:0;margin-top:4px}
+
+  /* Section */
+  section{margin-bottom:48px}
+  h2{font-family:'Fraunces',serif;font-size:34px;font-weight:500;letter-spacing:-.015em;color:var(--teal-900);margin-bottom:8px}
+  h2 .num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gold);font-weight:500;display:block;margin-bottom:6px;letter-spacing:.1em}
+  h3{font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--teal-900);margin:24px 0 12px}
+  h4{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--teal-900);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+  p{margin-bottom:14px;color:#1F302F}
+  .lead{font-size:17px;color:var(--muted);max-width:700px;margin-bottom:24px}
+
+  .pull{
+    background:var(--white);border-left:3px solid var(--gold);
+    padding:18px 22px;border-radius:0 12px 12px 0;
+    font-family:'Fraunces',serif;font-size:18px;line-height:1.55;color:var(--teal-800);
+    margin:24px 0;font-style:italic;
+  }
+
+  /* Pain Points */
+  .pain-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:18px}
+  .pain{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .pain .ico{font-size:24px;margin-bottom:8px}
+  .pain h4{margin-bottom:6px;text-transform:none;letter-spacing:0;font-size:16px}
+  .pain p{font-size:13px;color:var(--muted);margin:0}
+
+  /* Modules */
+  .module{display:grid;grid-template-columns:32px 1fr;gap:18px;padding:22px 0;border-bottom:1px dashed var(--line)}
+  .module:last-child{border-bottom:none}
+  .module .num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gold);font-weight:600;padding-top:4px}
+  .module h4{font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--teal-900);text-transform:none;letter-spacing:0;margin-bottom:6px}
+  .module p{font-size:14px;color:var(--muted);margin-bottom:8px}
+  .module .feats{display:flex;flex-wrap:wrap;gap:6px}
+  .module .feats span{font-size:11px;padding:3px 9px;background:var(--teal-50);border-radius:6px;color:var(--teal-800);border:1px solid var(--teal-100);font-family:'JetBrains Mono',monospace}
+
+  /* Stack */
+  .stack{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:18px}
+  .stack-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:22px}
+  .stack-card.featured{border:1.5px solid var(--gold);background:linear-gradient(180deg,var(--cream-2),var(--white));position:relative}
+  .stack-card.featured::before{content:"⭐ Önerilen";position:absolute;top:-1px;right:14px;background:var(--gold);color:var(--teal-900);font-size:10px;padding:3px 10px;border-radius:0 0 8px 8px;font-weight:600;letter-spacing:.04em}
+  .stack-card h4{margin-bottom:4px;text-transform:none;letter-spacing:0;font-size:17px;font-family:'Fraunces',serif;font-weight:600}
+  .stack-card .why{font-size:12px;color:var(--gold);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+  .stack-card ul{list-style:none}
+  .stack-card li{font-size:13px;padding:6px 0;display:flex;justify-content:space-between;border-bottom:1px dashed var(--line);color:var(--ink)}
+  .stack-card li:last-child{border-bottom:none}
+  .stack-card li b{color:var(--teal-900);font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px}
+
+  /* Timeline */
+  .phases{position:relative;padding-left:32px;margin-top:24px}
+  .phases::before{content:"";position:absolute;left:11px;top:18px;bottom:18px;width:2px;background:var(--line)}
+  .phase{position:relative;padding:18px 22px;background:var(--white);border:1px solid var(--line);border-radius:14px;margin-bottom:16px}
+  .phase::before{content:"";position:absolute;left:-26px;top:24px;width:14px;height:14px;border-radius:50%;background:var(--white);border:3px solid var(--gold);box-shadow:0 0 0 3px var(--cream)}
+  .phase-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px}
+  .phase-head h4{font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--teal-900);text-transform:none;letter-spacing:0;margin:0}
+  .phase-week{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);background:var(--cream-2);padding:4px 10px;border-radius:99px;border:1px solid var(--gold-soft);text-transform:uppercase;letter-spacing:.06em}
+  .phase ul{list-style:none;font-size:13px;color:var(--muted);margin-top:8px}
+  .phase li{padding:3px 0;padding-left:18px;position:relative}
+  .phase li::before{content:"→";position:absolute;left:0;color:var(--gold);font-weight:600}
+  .phase .deliv{margin-top:10px;padding:10px 12px;background:var(--teal-50);border-radius:8px;font-size:12px;color:var(--teal-800)}
+  .phase .deliv b{color:var(--teal-900)}
+
+  /* Budget */
+  .budget-table{background:var(--white);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:18px}
+  .budget-table table{width:100%;border-collapse:collapse}
+  .budget-table th{background:var(--cream-2);text-align:left;padding:14px 18px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-family:'JetBrains Mono',monospace;font-weight:500;border-bottom:1px solid var(--line)}
+  .budget-table td{padding:14px 18px;border-bottom:1px solid var(--line);font-size:14px}
+  .budget-table tr:last-child td{border-bottom:none}
+  .budget-table .amt{text-align:right;font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--teal-900)}
+  .budget-table .total{background:var(--teal-900);color:var(--cream-2)}
+  .budget-table .total td{font-family:'Fraunces',serif;font-size:18px;font-weight:600;border:none}
+  .budget-table .total .amt{color:var(--gold);font-family:'Fraunces',serif}
+
+  /* Architecture */
+  .arch{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:28px;margin-top:18px}
+  .arch-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
+  .arch-box{padding:16px 14px;border-radius:10px;text-align:center;font-size:12px;font-family:'JetBrains Mono',monospace;border:1px dashed var(--line)}
+  .arch-box.client{background:var(--cream-2);color:var(--teal-800)}
+  .arch-box.api{background:var(--teal-50);color:var(--teal-800);border-color:var(--teal-100)}
+  .arch-box.data{background:var(--teal-900);color:var(--gold-soft);border-color:var(--teal-900);border-style:solid}
+  .arch-box b{display:block;font-size:13px;color:inherit;font-weight:600;margin-bottom:4px;text-transform:none;font-family:'Fraunces',serif;font-style:italic}
+  .arch-box.data b{color:var(--gold)}
+  .arch-arrow{text-align:center;color:var(--muted);font-size:20px;margin:4px 0}
+
+  /* Closing */
+  .closing{
+    background:var(--teal-900);color:var(--cream-2);
+    padding:48px;border-radius:20px;margin-top:48px;
+    background-image:radial-gradient(500px 250px at 100% 0%,rgba(201,169,97,.18),transparent 60%);
+  }
+  .closing h2{color:var(--cream-2);margin-bottom:14px}
+  .closing h2 em{color:var(--gold);font-style:italic}
+  .closing p{color:rgba(245,239,229,.85);font-size:15px;max-width:560px}
+  .closing .sig{margin-top:28px;padding-top:24px;border-top:1px dashed rgba(255,255,255,.18);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
+  .closing .sig .who{font-family:'Fraunces',serif;font-size:18px;color:var(--gold);font-weight:600}
+  .closing .sig .when{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold-soft);text-transform:uppercase;letter-spacing:.08em}
+  .closing .cta{display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--teal-900);padding:12px 22px;border-radius:99px;font-weight:600;text-decoration:none;margin-top:18px}
+
+  @media print{
+    body{background:white}
+    .doc{max-width:100%;padding:20px}
+    .cover,.closing{page-break-after:always}
+    section{page-break-inside:avoid}
+  }
+  @media (max-width:760px){
+    .doc{padding:30px 20px}
+    .cover{padding:36px 28px}
+    .cover h1{font-size:38px}
+    h2{font-size:26px}
+    .pain-grid,.stack,.cover-meta,.arch-row{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="logo">
+      <span class="dot"></span> Yönetim Paneli <small>Teklif Dokümanı</small>
+    </div>
+    <h1>Hekim ile laboratuvarı <em>tek platformda</em> buluşturan dijital köprü.</h1>
+    <p class="lead">Bu doküman, talep ettiğiniz dental iş paylaşım platformunun (MVP versiyonu) teknik mimarisi, geliştirme planı, teknoloji seçimi ve maliyet kırılımını içerir. Sektörün gerçek bir ihtiyacını çözecek, üretime hazır bir prototip için detaylı yol haritası.</p>
+    <div class="cover-meta">
+      <div>Proje Süresi <b>6–8 Hafta</b></div>
+      <div>Versiyon <b>MVP v1.0</b></div>
+      <div>Teklif Tarihi <b>Nisan 2026</b></div>
+    </div>
+  </div>
+
+  <!-- PROJECT UNDERSTANDING -->
+  <section>
+    <h2><span class="num">01 — PROJEYI ANLAMA</span>Çözmeye değer bir gerçek sorun.</h2>
+    <p class="lead">Brifinizi okuduğumda hemen anladım: bu, tipik bir "şirket içi panel" projesi değil. Türkiye'de hekimler ile dental laboratuvarlar arasındaki iş akışı hâlâ WhatsApp, telefon ve kargo üzerinden yürüyor. STL dosyaları kayboluyor, durum bilgisi alınamıyor, fiyat şeffaflığı yok. Siz bunu çözmek istiyorsunuz — ben de tam buna odaklanan bir sistem inşa etmek için buradayım.</p>
+
+    <div class="pull">"Sektörün gerçek bir ihtiyacını çözmek için bu projeye oldukça önem veriyorum." — Sizin sözleriniz, benim çıkış noktam.</div>
+
+    <h3>Çözeceğimiz somut acılar</h3>
+    <div class="pain-grid">
+      <div class="pain">
+        <div class="ico">📞</div>
+        <h4>Telefon trafiği kaosu</h4>
+        <p>Her hekim, her sipariş için lab'la 3-5 mesajlaşma yapıyor. Bu sürece son.</p>
+      </div>
+      <div class="pain">
+        <div class="ico">📁</div>
+        <h4>STL dosya kayıpları</h4>
+        <p>WhatsApp boyut limiti, e-posta ekleri, kayıp linkler. Versiyon karmaşası.</p>
+      </div>
+      <div class="pain">
+        <div class="ico">🌫️</div>
+        <h4>Durum opaklığı</h4>
+        <p>Hekim, işin nerede olduğunu sormak zorunda. Lab her gün cevaplıyor.</p>
+      </div>
+      <div class="pain">
+        <div class="ico">🔍</div>
+        <h4>Doğru lab bulma zorluğu</h4>
+        <p>Yeni hekim, yeni şehirdeki kaliteli lab'ı nasıl bulacak? Tavsiye yetersiz.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MVP SCOPE -->
+  <section>
+    <h2><span class="num">02 — MVP KAPSAMI</span>İlk versiyonda ne çalışacak?</h2>
+    <p class="lead">Brifte talep edilen tüm özellikler dahil; MVP'yi gereksiz ekstralarla şişirmiyoruz. Çalışan, sorunsuz, üretim kalitesinde 6 modül teslim edilecek.</p>
+
+    <div class="module">
+      <span class="num">M1</span>
+      <div>
+        <h4>Çift Rollü Kayıt & Giriş Sistemi</h4>
+        <p>Hekim ve laboratuvar için ayrı kayıt akışları, KVKK onay süreci, e-posta doğrulama, şifre sıfırlama, JWT tabanlı oturum yönetimi.</p>
+        <div class="feats"><span>2 rol</span><span>E-posta doğrulama</span><span>JWT</span><span>Şifre kurtarma</span><span>KVKK</span></div>
+      </div>
+    </div>
+
+    <div class="module">
+      <span class="num">M2</span>
+      <div>
+        <h4>Laboratuvar Keşif & Filtreleme</h4>
+        <p>Hekim için arama motoru: bölge, uzmanlık alanı, fiyat aralığı, değerlendirme. Detaylı lab profili — vitrin görselleri, fiyat listesi, yorumlar.</p>
+        <div class="feats"><span>Çok kriterli filtre</span><span>Lab profili</span><span>Yorumlar</span><span>Konum bazlı sıralama</span></div>
+      </div>
+    </div>
+
+    <div class="module">
+      <span class="num">M3</span>
+      <div>
+        <h4>Hekim Paneli — Sipariş & STL Yükleme</h4>
+        <p>Drag-drop ile STL/PLY/OBJ dosyası yükleme (chunked upload, 200MB limit), sipariş formu, lab seçimi, hasta kodu/diş numarası/renk girişi.</p>
+        <div class="feats"><span>Chunked upload</span><span>STL/PLY/OBJ</span><span>200MB limit</span><span>Hasta kodu</span><span>Çoklu dosya</span></div>
+      </div>
+    </div>
+
+    <div class="module">
+      <span class="num">M4</span>
+      <div>
+        <h4>Laboratuvar Paneli — İş Yönetimi</h4>
+        <p>Gelen siparişleri görme, kabul/red, durum güncelleme (Bekliyor → Üretimde → Tamamlandı), STL indirme, hekim ile mesajlaşma.</p>
+        <div class="feats"><span>Kanban benzeri akış</span><span>Durum güncelleme</span><span>Mesajlaşma</span><span>STL indirme</span></div>
+      </div>
+    </div>
+
+    <div class="module">
+      <span class="num">M5</span>
+      <div>
+        <h4>İş Takip & Bildirim Sistemi</h4>
+        <p>Her sipariş için canlı zaman çizelgesi, ETA tahmini, e-posta + uygulama içi bildirim, durum değişikliklerinde otomatik tetikleme.</p>
+        <div class="feats"><span>Timeline</span><span>E-posta bildirim</span><span>In-app notif</span><span>ETA</span></div>
+      </div>
+    </div>
+
+    <div class="module">
+      <span class="num">M6</span>
+      <div>
+        <h4>Admin Konsolu</h4>
+        <p>Lab başvuru onayları, kullanıcı yönetimi, sipariş raporları, sistem sağlığı dashboard'u, basit komisyon ayarları (sonraki versiyon için).</p>
+        <div class="feats"><span>Lab onay</span><span>Kullanıcı yön.</span><span>Raporlar</span><span>Loglar</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECH STACK -->
+  <section>
+    <h2><span class="num">03 — TEKNOLOJİ SEÇİMİ</span>Doğru araç, doğru iş için.</h2>
+    <p class="lead">Brifinizde teknoloji önerisi istemişsiniz. Üç farklı stack üzerinde geliştirme deneyimim var; sizin projeniz için en uygun olanı seçtim. Gerekçeler aşağıda.</p>
+
+    <div class="stack">
+      <div class="stack-card featured">
+        <h4>Laravel 11 + React + Inertia.js</h4>
+        <div class="why">— Önerilen tercih</div>
+        <ul>
+          <li>Backend <b>Laravel 11</b></li>
+          <li>Frontend <b>React 18</b></li>
+          <li>Veritabanı <b>PostgreSQL</b></li>
+          <li>Dosya Depolama <b>MinIO / S3</b></li>
+          <li>Realtime <b>Laravel Reverb</b></li>
+          <li>Auth <b>Sanctum + JWT</b></li>
+          <li>Server <b>Ubuntu + Nginx</b></li>
+        </ul>
+      </div>
+
+      
+    </div>
+
+    <h3>Neden Laravel + React?</h3>
+    <p>Türkiye'de Laravel ekosistemi çok güçlü; bakım/devralma kolay, hosting maliyetleri düşük. Dosya yükleme altyapısı (Storage facade + chunked upload paketleri) hazır ve test edilmiş. Inertia.js ile API yazma yükü olmadan SPA hissi veriyoruz; geliştirme süresi kısalıyor — bu da bütçeniz için kritik. Türkiye'deki ödeme entegrasyonları (iyzico, PayTR) için Laravel paketleri mevcut, ileride kolay eklenir.</p>
+
+    <h3>Sistem Mimarisi</h3>
+    <div class="arch">
+      <div class="arch-row">
+        <div class="arch-box client"><b>Hekim Paneli</b>React SPA</div>
+        <div class="arch-box client"><b>Lab Paneli</b>React SPA</div>
+        <div class="arch-box client"><b>Admin Konsolu</b>React SPA</div>
+      </div>
+      <div class="arch-arrow">↓ HTTPS / WebSocket</div>
+      <div class="arch-row">
+        <div class="arch-box api" style="grid-column:1 / -1"><b>Laravel API + Reverb (WebSocket)</b>Auth, business logic, file orchestration, notifications</div>
+      </div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-row">
+        <div class="arch-box data"><b>PostgreSQL</b>Yapılandırılmış veri</div>
+        <div class="arch-box data"><b>MinIO / S3</b>STL dosyaları (şifreli)</div>
+        <div class="arch-box data"><b>Redis</b>Cache + Queue</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section>
+    <h2><span class="num">04 — YOL HARİTASI</span>Hafta hafta ne teslim edilecek?</h2>
+    <p class="lead">7 haftalık net bir plan. Her hafta sonunda demoyu birlikte inceliyoruz; sürprize yer yok.</p>
+
+    <div class="phases">
+      <div class="phase">
+        <div class="phase-head"><h4>Faz 1 — Temel Altyapı & Tasarım</h4><span class="phase-week">Hafta 1</span></div>
+        <ul>
+          <li>Proje kurulumu (Laravel + React + DB)</li>
+          <li>Veritabanı şeması (kullanıcılar, siparişler, dosyalar, mesajlar)</li>
+          <li>Tasarım sistemi & UI kit (renk, font, bileşenler)</li>
+          <li>Geliştirme ve staging ortamlarının kurulumu</li>
+        </ul>
+        <div class="deliv"><b>Teslim:</b> Çalışan iskelet + DB şeması + tasarım onayı</div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-head"><h4>Faz 2 — Auth & Kullanıcı Yönetimi</h4><span class="phase-week">Hafta 2</span></div>
+        <ul>
+          <li>Hekim ve Lab için ayrı kayıt akışları</li>
+          <li>E-posta doğrulama, şifre sıfırlama</li>
+          <li>Profil sayfaları (hekim profili + lab vitrini)</li>
+          <li>Rol bazlı yetki sistemi</li>
+        </ul>
+        <div class="deliv"><b>Teslim:</b> Tam çalışan giriş/kayıt akışları (test edilebilir)</div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-head"><h4>Faz 3 — Lab Keşfi & Hekim Paneli</h4><span class="phase-week">Hafta 3</span></div>
+        <ul>
+          <li>Laboratuvar listeleme + filtreleme</li>
+          <li>Lab detay sayfası (vitrin, fiyatlar, yorumlar)</li>
+          <li>Hekim ana panel (dashboard, istatistikler)</li>
+        </ul>
+        <div class="deliv"><b>Teslim:</b> Hekim, lab arayıp seçebiliyor</div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-head"><h4>Faz 4 — STL Yükleme & Sipariş Sistemi</h4><span class="phase-week">Hafta 4</span></div>
+        <ul>
+          <li>Chunked upload (büyük dosyalar için)</li>
+          <li>STL/PLY/OBJ format doğrulama, virüs taraması</li>
+          <li>Sipariş oluşturma formu</li>
+          <li>Şifreli depolama (KVKK uyumlu)</li>
+        </ul>
+        <div class="deliv"><b>Teslim:</b> Hekim, STL yükleyip sipariş gönderebiliyor — projenin kalbi</div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-head"><h4>Faz 5 — Lab Paneli & İş Takibi</h4><span class="phase-week">Hafta 5</span></div>
+        <ul>
+          <li>Gelen siparişler ekranı</li>
+          <li>Durum güncelleme (Bekliyor / Üretimde / Tamamlandı)</li>
+          <li>İş detay timeline'ı</li>
+          <li>STL indirme (güvenli imzalı linkler)</li>
+        </ul>
+        <div class="deliv"><b>Teslim:</b> Uçtan uca sipariş akışı çalışıyor</div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-head"><h4>Faz 6 — Mesajlaşma, Bildirim & Admin</h4><span class="phase-week">Hafta 6</span></div>
+        <ul>
+          <li>Sipariş bazlı mesajlaşma (canlı, WebSocket)</li>
+          <li>E-posta + in-app bildirim sistemi</li>
+          <li>Admin paneli (lab onay, kullanıcı yönetimi, raporlar)</li>
+        </ul>
+        <div class="deliv"><b>Teslim:</b> Tam fonksiyonel sistem, admin kontrolü</div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-head"><h4>Faz 7 — Test, Optimizasyon & Yayın</h4><span class="phase-week">Hafta 7</span></div>
+        <ul>
+          <li>End-to-end testler, hata düzeltmeleri</li>
+          <li>Performans optimizasyonu</li>
+          <li>Sunucu kurulumu, SSL, yedekleme</li>
+          <li>Kullanıcı dokümantasyonu + admin eğitimi</li>
+        </ul>
+        <div class="deliv"><b>Teslim:</b> Canlı yayında çalışan sistem 🚀</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BUDGET -->
+  <section>
+
+  
+  </section>
+
+  <!-- WORKING STYLE -->
+  <section>
+    <h2><span class="num">06 — ÇALIŞMA ŞEKLİ</span>İletişim, raporlama, şeffaflık.</h2>
+    <p class="lead">Brifte "düzenli raporlama" ve "ciddiyet" istemişsiniz. Bu, benim varsayılan çalışma şeklim zaten.</p>
+    <h3>Haftalık ritim</h3>
+    <p><b>Pazartesi:</b> Haftanın hedefleri WhatsApp/e-posta ile yazılı paylaşılır. <b>Çarşamba:</b> Ara durum raporu + canlı staging linki. <b>Cuma:</b> Hafta sonu demosu (15-20 dk video call), birlikte gözden geçiriyoruz, geri bildirim alıyorum, sonraki haftaya net giriyoruz.</p>
+    
+    <h3>Cevap süreleri</h3>
+    <p>İş saatleri içinde mesajlara <b>2 saat içinde</b>, dışında ertesi sabah cevap garantisi. Acil durumlarda telefon erişimi açık.</p>
+  </section>
+
+  <!-- WHY ME -->
+  <section>
+    <h2><span class="num">07 — NEDEN BEN?</span>Brifteki kriterlerin karşılığı.</h2>
+    <div class="pain-grid">
+      <div class="pain">
+        <h4>✓ Web tabanlı dashboard tecrübesi</h4>
+        <p>Yıllardır benzer ölçekte SaaS/dashboard projeleri geliştiriyorum.</p>
+      </div>
+      <div class="pain">
+        <h4>✓ Dosya yükleme uzmanlığı</h4>
+        <p>Chunked upload, S3/MinIO, virüs tarama, şifreli depolama — tümü sahada test edilmiş.</p>
+      </div>
+      <div class="pain">
+        <h4>✓ Düzenli raporlama disiplini</h4>
+        <p>Haftalık demo + Trello + cevap süresi garantisi. Yazılı süreç sahibiyim.</p>
+      </div>
+      <div class="pain">
+        <h4>✓ Sektörü ciddiye alan yaklaşım</h4>
+        <p>Brifinizdeki "ciddiyet" cümlesi bu teklifin temelinde. KVKK, dental iş akışları üzerine ön araştırma yapıldı.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- V2 ROADMAP -->
+  <section>
+    <h2><span class="num">08 — SONRAKİ AŞAMALAR (V2+)</span>Bugün değil, ama planda var.</h2>
+    <p>MVP'de fazla şişirmiyoruz — ama gelecek planını birlikte düşünelim. Brifte bahsettiğiniz "ilerleyen aşamalar" için şunlar uygun:</p>
+    <p><b>V2 (3-4 ay sonra):</b> iyzico/PayTR entegrasyonu, lab faturalandırma, hekim için takvim entegrasyonu, STL önizleme (3D viewer), gelişmiş analitik raporlar.</p>
+    <p><b>V3 (6+ ay):</b> iOS + Android mobil uygulamalar (React Native ile MVP kodunun %60+ tekrar kullanımı), kargo/lojistik entegrasyonları (Yurtiçi, MNG API), AI destekli iş tahmin sistemi, marketplace komisyon modeli.</p>
+  </section>
+
+  <!-- CLOSING -->
+  <div class="closing">
+    <h2>Sektörünüzün <em>gerçek bir sorununu</em> çözmek için hazırım.</h2>
+    <p>Bu projede sadece kod yazmıyorum — Türkiye'deki dental ekosistemi dijitalleştiren bir şeyin parçası oluyorum. Brifinizdeki ciddiyet bana ulaştı; ben de aynı ciddiyetle yaklaşıyorum. 7 hafta sonra elinizde, gerçekten çalışan, ölçeklenebilir bir platform olacak.</p>
+    <a href="#" class="cta">Görüşmeye hazırım →</a>
+    <div class="sig">
+      <div>
+        <div class="who">Onur Doğan</div>
+        <div class="when">Full-Stack Web Developer • Bursa</div>
+      </div>
+      <div class="when">Bu teklif 30 gün geçerlidir</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
